@@ -20,8 +20,7 @@ public class Reserva {
     Vector <models.Usuario> usuarios;
     Vector <models.Cancha> canchas;
 
-    public Reserva(int id, String cedulaUsuario, int idCancha, Date fecha, Time horarioInicio, Time horarioFinal, Time horaCancelacion, String metodoPago, boolean estaPagada, boolean estaActiva){
-        this.id = id;
+    public Reserva(String cedulaUsuario, int idCancha, Date fecha, Time horarioInicio, Time horarioFinal, Time horaCancelacion, String metodoPago, boolean estaPagada, boolean estaActiva){
         this.cedulaUsuario = cedulaUsuario;
         this.idCancha = idCancha;
         this.fecha = fecha;
