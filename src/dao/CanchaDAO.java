@@ -145,4 +145,60 @@ public class CanchaDAO {
             throw new RuntimeException("Error al listar canchas: " + e.getMessage(), e);
         }
     }
+    public void desactivarCancha(Cancha canchaDesactivar){
+        String consultaReservas = "SELECT COUNT(*) FROM Reserva WHERE idCancha = ? AND estaActiva = TRUE";
+        String eliminarHorarios = "DELETE FROM CanchaHorario WHERE idCancha = ?";
+        String eliminarCancha = "DELETE FROM Cancha WHERE id = ?";
+
+        Connection conn = null;
+        PreparedStatement psReservas = null;
+        PreparedStatement psEliminarHorarios = null;
+        PreparedStatement psEliminarCancha = null;
+        ResultSet rs = null;
+        try {
+            conn = DatabaseConnection.getInstancia().getConnection();
+            conn.setAutoCommit(false); // Para asegurar atomicidad
+
+            // Verificar reservas activas
+            psReservas = conn.prepareStatement(consultaReservas);
+            psReservas.setInt(1, canchaDesactivar.getId());
+            rs = psReservas.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                System.out.println("ERROR: No se puede eliminar la cancha. Tiene reservas activas.");
+                conn.rollback();
+                return;
+            }
+            // Eliminar horarios asociados
+            psEliminarHorarios = conn.prepareStatement(eliminarHorarios);
+            psEliminarHorarios.setInt(1, canchaDesactivar.getId());
+            psEliminarHorarios.executeUpdate();
+
+            // Eliminar cancha
+            psEliminarCancha = conn.prepareStatement(eliminarCancha);
+            psEliminarCancha.setInt(1, canchaDesactivar.getId());
+            psEliminarCancha.executeUpdate();
+
+            conn.commit();
+            System.out.println("Cancha y sus horarios eliminados correctamente (ID: " + canchaDesactivar.getId() + ")");
+        } catch(SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException rollbackEx) {
+                    System.err.println("Error al hacer rollback: " + rollbackEx.getMessage());
+                }
+            }
+            throw new RuntimeException("Error al eliminar la cancha: " + e.getMessage(), e);
+        }finally {
+            try {
+                if (rs != null) rs.close();
+                if (psReservas != null) psReservas.close();
+                if (psEliminarHorarios != null) psEliminarHorarios.close();
+                if (psEliminarCancha != null) psEliminarCancha.close();
+                if (conn != null) conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
+    }
 }
