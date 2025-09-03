@@ -1,5 +1,6 @@
 package models;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Jugador extends Usuario {
@@ -9,8 +10,8 @@ public class Jugador extends Usuario {
     private boolean incumplePago;
     private boolean estaBaneado;
 
-    public Jugador(String cedula, String nombre, String apellido, String correo, String contraseniaCuenta, LocalDate fechaNacimiento, String categoria, String genero, boolean incumplePago, boolean estaBaneado) {
-        super(cedula, nombre, apellido, correo, contraseniaCuenta);
+    public Jugador(String cedula, String nombre, String apellido, String correo, String contraseniaCuenta, String telefono, LocalDate fechaNacimiento, String categoria, String genero, boolean incumplePago, boolean estaBaneado) {
+        super(cedula, nombre, apellido, correo, contraseniaCuenta, telefono);
         this.fechaNacimiento = fechaNacimiento;
         this.categoria = categoria;
         this.genero = genero;
@@ -18,9 +19,10 @@ public class Jugador extends Usuario {
         this.estaBaneado = estaBaneado;
     }
 
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
+    public java.sql.Date getFechaNacimiento() {
+        return java.sql.Date.valueOf(fechaNacimiento);
     }
+
 
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;

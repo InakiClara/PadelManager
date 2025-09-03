@@ -1,23 +1,22 @@
 package models;
-import java.util.ArrayList;
 
 public class Usuario {
     private String cedula;
     private String nombre;
     private String apellido;
     private String correo;
-    private ArrayList<String> telefonos;
+    private String telefono;
     private String contraseniaCuenta;
 
     public Usuario() {
     }
-    public Usuario(String cedula, String nombre, String apellido, String correo, String contraseniaCuenta) {
+    public Usuario(String cedula, String nombre, String apellido, String correo, String contraseniaCuenta, String telefono) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.contraseniaCuenta = contraseniaCuenta;
-        this.telefonos = new ArrayList<>();
+        this.telefono = telefono;
     }
 
 
@@ -53,17 +52,9 @@ public class Usuario {
         this.cedula = cedula;
     }
 
-    public ArrayList<String> getTelefonos() {
-        return telefonos;
-    }
+    public String getTelefono() { return telefono;}
 
-    public void agregarTelefono(String telefono) {
-        this.telefonos.add(telefono);
-    }
-
-    public void eliminarTelefono(String telefono) {
-        this.telefonos.remove(telefono);
-    }
+    public void setTelefono(String telefono) {this.telefono = telefono;}
 
     public String getContraseniaCuenta() {
         return contraseniaCuenta;
