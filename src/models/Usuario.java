@@ -1,22 +1,23 @@
 package models;
+import java.util.ArrayList;
 
 public class Usuario {
     private String cedula;
     private String nombre;
     private String apellido;
     private String correo;
-    private String telefono;
+    private ArrayList<String> telefonos;
     private String contraseniaCuenta;
 
     public Usuario() {
     }
-    public Usuario(String cedula, String nombre, String apellido, String correo, String telefono, String contraseniaCuenta) {
+    public Usuario(String cedula, String nombre, String apellido, String correo, String contraseniaCuenta) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
-        this.telefono = telefono;
         this.contraseniaCuenta = contraseniaCuenta;
+        this.telefonos = new ArrayList<>();
     }
 
 
@@ -52,14 +53,17 @@ public class Usuario {
         this.cedula = cedula;
     }
 
-    public String getTelefono() {
-        return telefono;
+    public ArrayList<String> getTelefonos() {
+        return telefonos;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
+    public void agregarTelefono(String telefono) {
+        this.telefonos.add(telefono);
     }
 
+    public void eliminarTelefono(String telefono) {
+        this.telefonos.remove(telefono);
+    }
 
     public String getContraseniaCuenta() {
         return contraseniaCuenta;
@@ -67,16 +71,6 @@ public class Usuario {
 
     public void setContraseniaCuenta(String contraseniaCuenta) {
         this.contraseniaCuenta = contraseniaCuenta;
-    }
-
-    @Override
-    public String toString() {
-        return "Cédula: " + cedula +
-                ", Nombre: " + nombre +
-                ", Apellido: " + apellido +
-                ", Correo: " + correo +
-                ", Teléfono: " + telefono +
-                ", Contraseña: " + contraseniaCuenta;
     }
 
 }
