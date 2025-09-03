@@ -128,16 +128,20 @@ public class Menu {
         System.out.print("Correo: ");
         String correo = scanner.nextLine();
 
+        System.out.print("Telefono: ");
+        String telefono = scanner.nextLine();
+
         System.out.print("Contraseña: ");
         String contrasenia = scanner.nextLine();
 
-        Administrador admin = new Administrador(cedula, nombre, apellido, correo, contrasenia);
+        Administrador admin = new Administrador(cedula, nombre, apellido, correo, telefono, contrasenia);
 
         administradorDAO.modificarAdministrador(admin);
     }
 
 
     private void crearAdministrador() {
+
         System.out.print("Cédula: ");
         String cedula = scanner.nextLine();
 
@@ -150,13 +154,17 @@ public class Menu {
         System.out.print("Correo: ");
         String correo = scanner.nextLine();
 
+        System.out.print("Teléfono: ");
+        String telefono = scanner.nextLine();
+
         System.out.print("Contraseña: ");
         String contrasenia = scanner.nextLine();
 
-        Administrador admin = new Administrador(cedula, nombre, apellido, correo, contrasenia);
+        Administrador admin = new Administrador(cedula, nombre, apellido, correo, telefono, contrasenia);
+
         administradorDAO.crearAdministrador(admin);
 
-        System.out.println("Administrador creado correctamente.");
+        System.out.println("Administrador creado correctamente.\n");
     }
 
     private void eliminarAdministrador() {
@@ -184,7 +192,7 @@ public class Menu {
 
     private void crearReserva() {
         try {
-            System.out.print("Cédula del usuario: ");
+            System.out.print("Cédula del jugador: ");
             String cedulaUsuario = scanner.nextLine();
 
             System.out.print("ID de la cancha: ");
