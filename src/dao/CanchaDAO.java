@@ -9,7 +9,7 @@ import java.util.Vector;
 public class CanchaDAO {
     public void altaCancha(Cancha nuevaCancha){
         String consultaCancha = "INSERT INTO Cancha (id, precio, esTechada, estaDisponible) VALUES (?, ?, ?, ?)";
-        String consultaHorario = "INSERT INTO CanchaHorario (idC, horario) VALUES (?, ?)";
+        String consultaHorario = "INSERT INTO CanchaHorario (idCancha, horario) VALUES (?, ?)";
         Connection conn = null;
         PreparedStatement psCancha = null;
         PreparedStatement psHorario = null;
