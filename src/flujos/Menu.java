@@ -8,22 +8,23 @@ import java.util.Scanner;
 import java.util.Vector;
 
 import dao.AdministradorDAO;
+import dao.CanchaDAO;
 import dao.ReservaDAO;
 import dao.UsuarioDAO;
-import models.Reserva;
-import models.Usuario;
-import models.Administrador;
+import models.*;
+
 public class Menu {
 
     private final Scanner scanner = new Scanner(System.in);
     //private final UsuarioDAO usuarioDAO;
     private final ReservaDAO reservaDAO;
     private final AdministradorDAO administradorDAO;
-
+    private final CanchaDAO canchaDAO;
     public Menu() {
         //this.usuarioDAO = new UsuarioDAO();
         this.reservaDAO = new ReservaDAO();
         this.administradorDAO = new AdministradorDAO();
+        this.canchaDAO = new CanchaDAO();
     }
 
 
@@ -44,7 +45,8 @@ public class Menu {
                 System.out.println("7. Eliminar Administrador");
                 System.out.println("8. Modificar Administrador");
                 System.out.println("9. Listar Administradores");
-                System.out.println("10. Salir");
+                System.out.println("10. Crear Cancha");
+                System.out.println("11. Salir");
                 System.out.println("============================");
                 System.out.print("Opcion: ");
 
@@ -80,6 +82,9 @@ public class Menu {
                         listarAdministradores();
                         break;
                     case 10:
+                        crearCancha();
+                        break;
+                    case 11:
                         System.out.println("Saliendo...");
                         break;
                     default:
@@ -292,6 +297,39 @@ public class Menu {
                 System.out.println(r);
             }
         }
+    }
+    private void crearCancha() {
+        System.out.println("Ingrese ID:");
+        int id = scanner.nextInt();
+
+        System.out.print("Precio por hora: ");
+        double precio = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.print("Es techada (true/false): ");
+        boolean esTechada = scanner.nextBoolean();
+        scanner.nextLine();
+
+        System.out.print("Está disponible (true/false): ");
+        boolean estaDisponible = scanner.nextBoolean();
+        scanner.nextLine();
+
+        System.out.print("Número de horarios disponibles: ");
+        int numHorarios = scanner.nextInt();
+        scanner.nextLine();
+
+        Vector<Time> horarios = new Vector<>();
+        for (int i = 0; i < numHorarios; i++) {
+            System.out.print("Horario " + (i + 1) + " (HH:mm): ");
+            String horaStr = scanner.nextLine();
+            Time horario = Time.valueOf(horaStr + ":00");
+            horarios.add(horario);
+        }
+        CanchaHorario canchaHorario = new CanchaHorario(id, horarios);
+
+        Cancha nuevaCancha = new Cancha(id, esTechada, precio, estaDisponible, canchaHorario);
+
+        canchaDAO.altaCancha(nuevaCancha);
     }
 
 }
