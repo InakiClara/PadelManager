@@ -163,8 +163,7 @@ public class Menu {
         Administrador admin = new Administrador(cedula, nombre, apellido, correo, telefono, contrasenia);
 
         administradorDAO.crearAdministrador(admin);
-
-        System.out.println("Administrador creado correctamente.\n");
+        
     }
 
     private void eliminarAdministrador() {
