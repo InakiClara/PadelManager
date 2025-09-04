@@ -10,20 +10,24 @@ import java.util.Vector;
 import dao.AdministradorDAO;
 import dao.ReservaDAO;
 import dao.UsuarioDAO;
+import dao.CanchaDAO;
 import models.Reserva;
 import models.Usuario;
 import models.Administrador;
+import models.*;
 public class Menu {
 
     private static final Scanner scanner = new Scanner(System.in);
     private final UsuarioDAO usuarioDAO;
     private final ReservaDAO reservaDAO;
     private final AdministradorDAO administradorDAO;
+    private final CanchaDAO canchaDAO;
 
     public Menu() {
         this.usuarioDAO = new UsuarioDAO();
         this.reservaDAO = new ReservaDAO();
         this.administradorDAO = new AdministradorDAO();
+        this.canchaDAO = new CanchaDAO();
     }
 
 
@@ -48,7 +52,10 @@ public class Menu {
                 System.out.println("11. Cambiar contraseña");
                 System.out.println("12. Listar usuarios");
                 System.out.println("13. Eliminar usuarios/jugadores");
-                System.out.println("14. Salir");
+                System.out.println("14. Crear Cancha");
+                System.out.println("15. Listar Cancha");
+                System.out.println("16. Desactivar Cancha");
+                System.out.println("17. Salir");
                 System.out.println("============================");
                 System.out.print("Opcion: ");
 
@@ -94,7 +101,17 @@ public class Menu {
                         break;
                     case 13:
                         eliminarUsuario();
+                        break;
                     case 14:
+                        crearCancha();
+                        break;
+                    case 15:
+                        canchaDAO.listarCancha();
+                        break;
+                    case 16:
+                        desactivarCancha();
+                        break;
+                    case 17:
                         System.out.println("Saliendo...");
                         break;
                     default:
@@ -104,7 +121,7 @@ public class Menu {
                 System.out.println("Error: " + e.getMessage());
                 scanner.nextLine();
             }
-        } while (opcion != 13);
+        } while (opcion != 17);
     }
 
     private void listarAdministradores() {
@@ -344,7 +361,54 @@ public class Menu {
             System.out.println("Operación cancelada.");
         }
     }
+    private void crearCancha() {
+        System.out.println("Ingrese ID:");
+        int id = scanner.nextInt();
 
+        System.out.print("Precio por hora: ");
+        double precio = scanner.nextDouble();
+        scanner.nextLine();
 
+        System.out.print("Es techada (true/false): ");
+        boolean esTechada = scanner.nextBoolean();
+        scanner.nextLine();
+
+        System.out.print("Está disponible (true/false): ");
+        boolean estaDisponible = scanner.nextBoolean();
+        scanner.nextLine();
+
+        System.out.print("Número de horarios disponibles: ");
+        int numHorarios = scanner.nextInt();
+        scanner.nextLine();
+
+        Vector<Time> horarios = new Vector<>();
+        for (int i = 0; i < numHorarios; i++) {
+            System.out.print("Horario " + (i + 1) + " (HH:mm): ");
+            String horaStr = scanner.nextLine();
+            Time horario = Time.valueOf(horaStr + ":00");
+            horarios.add(horario);
+        }
+        CanchaHorario canchaHorario = new CanchaHorario(id, horarios);
+
+        Cancha nuevaCancha = new Cancha(id, esTechada, precio, estaDisponible, canchaHorario);
+
+        canchaDAO.altaCancha(nuevaCancha);
+    }
+    private void desactivarCancha() {
+        System.out.print("Ingrese el ID de la cancha a desactivar: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("¿Está seguro de desactivar esta cancha? (S/N): ");
+        String confirmacion = scanner.nextLine();
+
+        if (confirmacion.equalsIgnoreCase("S") || confirmacion.equalsIgnoreCase("s")) {
+            Cancha canchaDesactivar = new Cancha(id, false, 0.0, false, null);
+            canchaDesactivar.setId(id);
+            canchaDAO.desactivarCancha(canchaDesactivar);
+        } else {
+            System.out.println("Operación cancelada.");
+        }
+    }
 
 }
