@@ -55,7 +55,8 @@ public class Menu {
                 System.out.println("14. Crear Cancha");
                 System.out.println("15. Listar Cancha");
                 System.out.println("16. Desactivar Cancha");
-                System.out.println("17. Salir");
+                System.out.println("17. Actualizar Cancha");
+                System.out.println("18. Salir");
                 System.out.println("============================");
                 System.out.print("Opcion: ");
 
@@ -112,6 +113,9 @@ public class Menu {
                         desactivarCancha();
                         break;
                     case 17:
+                        actualizarCancha();
+                        break;
+                    case 18:
                         System.out.println("Saliendo...");
                         break;
                     default:
@@ -121,7 +125,7 @@ public class Menu {
                 System.out.println("Error: " + e.getMessage());
                 scanner.nextLine();
             }
-        } while (opcion != 17);
+        } while (opcion != 18);
     }
 
     private void listarAdministradores() {
@@ -409,6 +413,41 @@ public class Menu {
         } else {
             System.out.println("Operación cancelada.");
         }
+    }
+    private void actualizarCancha() {
+        System.out.print("Ingrese el ID de la cancha a actualizar: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Nuevo precio por hora: ");
+        double precio = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.print("¿Es techada? (true/false): ");
+        boolean esTechada = scanner.nextBoolean();
+        scanner.nextLine();
+
+        System.out.print("¿Está disponible? (true/false): ");
+        boolean estaDisponible = scanner.nextBoolean();
+        scanner.nextLine();
+
+        System.out.print("Número de horarios disponibles: ");
+        int numHorarios = scanner.nextInt();
+        scanner.nextLine();
+
+        Vector<Time> horarios = new Vector<>();
+        for (int i = 0; i < numHorarios; i++) {
+            System.out.print("Horario " + (i + 1) + " (HH:mm): ");
+            String horaStr = scanner.nextLine();
+            Time horario = Time.valueOf(horaStr + ":00");
+            horarios.add(horario);
+        }
+        CanchaHorario canchaHorario = new CanchaHorario(id, horarios);
+
+        Cancha canchaActualizar = new Cancha(id, esTechada, precio, estaDisponible, canchaHorario);
+        canchaActualizar.setId(id);
+
+        canchaDAO.actualizarCancha(canchaActualizar);
     }
 
 }

@@ -59,29 +59,41 @@ public class CanchaDAO {
     }
     public void actualizarCancha(Cancha canchaActualizada){
         String consultaCancha = "UPDATE Cancha SET precio = ?, esTechada = ?, estaDisponible = ? WHERE id = ?";
-        String consultaHorario = "UPDATE CanchaHorario SET horario = ? WHERE idCancha = ?";
+        String eliminarHorarios = "DELETE FROM CanchaHorario WHERE idCancha = ?";
+        String insertarHorario = "INSERT INTO CanchaHorario (idCancha, horario) VALUES (?, ?)";
         Connection conn = null;
         PreparedStatement psCancha = null;
-        PreparedStatement psHorario = null;
+        PreparedStatement psEliminarHorarios = null;
+        PreparedStatement psInsertarHorario = null;
         try{
             conn = DatabaseConnection.getInstancia().getConnection();
             conn.setAutoCommit(false);
 
+            conn = DatabaseConnection.getInstancia().getConnection();
+            conn.setAutoCommit(false);
+
+            //Actualizar datos de la cancha
             psCancha = conn.prepareStatement(consultaCancha);
             psCancha.setDouble(1, canchaActualizada.getPrecio());
             psCancha.setBoolean(2, canchaActualizada.isEsTechada());
             psCancha.setBoolean(3, canchaActualizada.isEstaDispoonible());
             psCancha.setInt(4, canchaActualizada.getId());
             psCancha.executeUpdate();
-            //Actualizar horarios
-            psHorario = conn.prepareStatement(consultaHorario);
+
+            //Eliminar horarios antiguos
+            psEliminarHorarios = conn.prepareStatement(eliminarHorarios);
+            psEliminarHorarios.setInt(1, canchaActualizada.getId());
+            psEliminarHorarios.executeUpdate();
+
+            //Insertar nuevos horarios
+            psInsertarHorario = conn.prepareStatement(insertarHorario);
             Vector<java.sql.Time> listaHorarios = canchaActualizada.getHorario().getHorarios();//Procesamiento por lotes
             for(java.sql.Time horario: listaHorarios){
-                psHorario.setInt(1, canchaActualizada.getId());
-                psHorario.setTime(2, horario);
-                psHorario.addBatch();
+                psInsertarHorario.setInt(1, canchaActualizada.getId());
+                psInsertarHorario.setTime(2, horario);
+                psInsertarHorario.addBatch();
             }
-            psHorario.executeBatch();
+            psInsertarHorario.executeBatch();
 
             conn.commit();
             System.out.println("Cancha actualizada correctamente");
@@ -95,10 +107,11 @@ public class CanchaDAO {
                 }
             }
             throw new RuntimeException("Error al actualizar la cancha: " + e.getMessage(), e);
-        }finally {//cierre de recursos
+        }finally {//Cierre de recursos
             try {
                 if (psCancha != null) psCancha.close();
-                if (psHorario != null) psHorario.close();
+                if (psInsertarHorario != null) psInsertarHorario.close();
+                if (psEliminarHorarios != null) psEliminarHorarios.close();
                 if (conn != null) conn.setAutoCommit(true);
             } catch (SQLException closeEx) {
                 System.err.println("Error al cerrar recursos: " + closeEx.getMessage());
