@@ -68,4 +68,8 @@ public class Usuario {
         this.contraseniaCuenta = contraseniaCuenta;
     }
 
+    @Override
+    public String toString() {
+        return "Cédula: " + cedula + ", Nombre: " + nombre + ", Apellido: " + apellido + ", Correo: " + correo + ", Teléfono: " + telefono + ", Contraseña: " + contraseniaCuenta;
+    }
 }
