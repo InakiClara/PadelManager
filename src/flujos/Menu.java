@@ -15,13 +15,13 @@ import models.Usuario;
 import models.Administrador;
 public class Menu {
 
-    private final Scanner scanner = new Scanner(System.in);
-    //private final UsuarioDAO usuarioDAO;
+    private static final Scanner scanner = new Scanner(System.in);
+    private final UsuarioDAO usuarioDAO;
     private final ReservaDAO reservaDAO;
     private final AdministradorDAO administradorDAO;
 
     public Menu() {
-        //this.usuarioDAO = new UsuarioDAO();
+        this.usuarioDAO = new UsuarioDAO();
         this.reservaDAO = new ReservaDAO();
         this.administradorDAO = new AdministradorDAO();
     }
@@ -44,7 +44,11 @@ public class Menu {
                 System.out.println("7. Eliminar Administrador");
                 System.out.println("8. Modificar Administrador");
                 System.out.println("9. Listar Administradores");
-                System.out.println("10. Salir");
+                System.out.println("10. Inicio seccion");
+                System.out.println("11. Cambiar contraseña");
+                System.out.println("12. Listar usuarios");
+                System.out.println("13. Eliminar usuarios/jugadores");
+                System.out.println("14. Salir");
                 System.out.println("============================");
                 System.out.print("Opcion: ");
 
@@ -80,6 +84,17 @@ public class Menu {
                         listarAdministradores();
                         break;
                     case 10:
+                        iniciarSesion();
+                        break;
+                    case 11:
+                        cambiarContrasenia();
+                        break;
+                    case 12:
+                        listarUsuarios();
+                        break;
+                    case 13:
+                        eliminarUsuario();
+                    case 14:
                         System.out.println("Saliendo...");
                         break;
                     default:
@@ -105,16 +120,7 @@ public class Menu {
     }
 
     private void modificarAdministrador() {
-        Vector<Administrador> administradors = administradorDAO.listarAdministradores();
-
-        if (administradors.isEmpty()) {
-            System.out.println("Listado no encontrado");
-            return;
-        }
-
-        for (Administrador a : administradors) {
-            System.out.println(a);
-        }
+        listarAdministradores();
 
         System.out.print("Cedula del Administrador: ");
         String cedula = scanner.nextLine();
@@ -163,20 +169,11 @@ public class Menu {
         Administrador admin = new Administrador(cedula, nombre, apellido, correo, telefono, contrasenia);
 
         administradorDAO.crearAdministrador(admin);
-        
+
     }
 
     private void eliminarAdministrador() {
-        Vector<Administrador> administradores = administradorDAO.listarAdministradores();
-
-        if (administradores.isEmpty()) {
-            System.out.println("Listado no encontrado");
-            return;
-        }
-
-        for (Administrador a : administradores) {
-            System.out.println(a);
-        }
+        listarAdministradores();
 
         System.out.print("Cédula del Administrador a eliminar: ");
         String cedula = scanner.nextLine();
@@ -186,7 +183,6 @@ public class Menu {
 
         administradorDAO.eliminarAdministrador(admin);
 
-        System.out.println("Administrador eliminado correctamente.");
     }
 
     private void crearReserva() {
@@ -217,7 +213,6 @@ public class Menu {
             Reserva reserva = new Reserva(cedulaUsuario, idCancha, fecha, horarioInicio, horarioFin, null, metodoPago, false, true);
             reservaDAO.crearReserva(reserva);
 
-            System.out.println("Reserva creada correctamente.");
         } catch (ParseException e) {
             System.out.println("Formato de fecha incorrecto. Use dd/MM/yyyy");
         }
@@ -230,7 +225,6 @@ public class Menu {
         scanner.nextLine();
 
         reservaDAO.cancelarReserva(id);
-        System.out.println("Reserva cancelada correctamente.");
     }
 
     private void modificarReserva() {
@@ -260,7 +254,6 @@ public class Menu {
         Reserva reserva = new Reserva("", 0, fecha, horarioInicio, horarioFin, null, "", false, true);
         reservaDAO.actualizarReserva(reserva);
 
-        System.out.println("Reserva modificada correctamente.");
     }
 
     private void listarReservasPorUsuario() {
@@ -293,5 +286,65 @@ public class Menu {
             }
         }
     }
+
+    private void iniciarSesion() {
+        System.out.print("Ingrese cédula: ");
+        String cedula = scanner.nextLine();
+
+        System.out.print("Ingrese contraseña: ");
+        String contrasenia = scanner.nextLine();
+
+        administradorDAO.inicioSesion(cedula, contrasenia);
+    }
+
+    private void cambiarContrasenia() {
+        System.out.print("Ingrese su cédula: ");
+        String cedula = scanner.nextLine();
+
+        System.out.print("Ingrese su contraseña actual: ");
+        String actual = scanner.nextLine();
+
+        System.out.print("Ingrese la nueva contraseña: ");
+        String nueva = scanner.nextLine();
+
+        administradorDAO.cambiarContrasenia(cedula, actual, nueva);
+    }
+
+    private void listarUsuarios() {
+        System.out.print("Ingrese criterio de búsqueda (cédula, nombre o apellido): ");
+        String criterio = scanner.nextLine();
+
+        Vector<Usuario> usuarios = administradorDAO.listarUsuarios(criterio);
+
+        if (usuarios.isEmpty()) {
+            System.out.println("No se encontraron usuarios que coincidan con el criterio.");
+        } else {
+            System.out.println("\n Usuarios encontrados: ");
+            for (Usuario u : usuarios) {
+                System.out.println("Cédula: " + u.getCedula());
+                System.out.println("Nombre: " + u.getNombre());
+                System.out.println("Apellido: " + u.getApellido());
+                System.out.println("Teléfono: " + u.getTelefono());
+                System.out.println("Correo: " + u.getCorreo());
+                System.out.println("------------------------");
+            }
+        }
+    }
+
+    private void eliminarUsuario() {
+        System.out.print("Ingrese la cédula del usuario a eliminar: ");
+        String cedula = scanner.nextLine();
+
+        System.out.print("¿Está seguro de eliminar este usuario/jugador? (S/N): ");
+        String confirmacion = scanner.nextLine();
+
+        if (confirmacion.equalsIgnoreCase("S")) {
+            administradorDAO.desactivarUsuarioPorCedula(cedula);
+        } else {
+            System.out.println("Operación cancelada.");
+        }
+    }
+
+
 
 }

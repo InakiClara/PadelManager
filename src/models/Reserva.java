@@ -124,5 +124,20 @@ public class Reserva {
     public void setCanchas(Vector<Cancha> canchas) {
         this.canchas = canchas;
     }
+
+    @Override
+    public String toString() {
+        return "ID Reserva: " + id +
+                ", Cédula Usuario: " + cedulaUsuario +
+                ", ID Cancha: " + idCancha +
+                ", Fecha: " + fecha +
+                ", Horario Inicio: " + horarioInicio +
+                ", Horario Final: " + horarioFinal +
+                ", Hora Cancelación: " + horaCancelacion +
+                ", Método de Pago: " + metodoPago +
+                ", Pagada: " + (estaPagada ? "Sí" : "No") +
+                ", Activa: " + (estaActiva ? "Sí" : "No");
+    }
+
 }
 
