@@ -56,7 +56,9 @@ public class Menu {
                 System.out.println("15. Listar Cancha");
                 System.out.println("16. Desactivar Cancha");
                 System.out.println("17. Actualizar Cancha");
-                System.out.println("18. Salir");
+                System.out.println("18. Listar reservas por fecha");
+                System.out.println("19. Listar reservas por fecha y jugador");
+                System.out.println("20. Salir");
                 System.out.println("============================");
                 System.out.print("Opcion: ");
 
@@ -116,6 +118,12 @@ public class Menu {
                         actualizarCancha();
                         break;
                     case 18:
+                        listarReservasPorFecha();
+                        break;
+                    case 19:
+                        listarReservasPorFechaJugador();
+                        break;
+                    case 20:
                         System.out.println("Saliendo...");
                         break;
                     default:
@@ -448,6 +456,44 @@ public class Menu {
         canchaActualizar.setId(id);
 
         canchaDAO.actualizarCancha(canchaActualizar);
+    }
+
+    private void listarReservasPorFecha() {
+        System.out.print("Ingrese la fecha para filtrar (formato: yyyy-MM-dd): ");
+        String fechaString = scanner.nextLine();
+
+        java.sql.Date fecha = java.sql.Date.valueOf(fechaString);
+
+        Vector<Reserva> reservas = reservaDAO.listarReservasPorFecha(fecha);
+
+        if (reservas.isEmpty()) {
+            System.out.println("No se encontraron reservas para esta fecha.");
+        } else {
+            for (Reserva r : reservas) {
+                System.out.println(r);
+            }
+        }
+    }
+
+    private void listarReservasPorFechaJugador() {
+        System.out.print("Ingrese la fecha para filtrar (formato: yyyy-MM-dd): ");
+        String fechaString = scanner.nextLine();
+
+        java.sql.Date fecha = java.sql.Date.valueOf(fechaString);
+
+        System.out.print("Cedula del usuario: ");
+        String cedula = scanner.nextLine();
+        scanner.nextLine();
+
+        Vector<Reserva> reservas = reservaDAO.listarReservasPorFechaJugador(fecha,cedula);
+
+        if (reservas.isEmpty()) {
+            System.out.println("No se encontraron reservas para esta fecha.");
+        } else {
+            for (Reserva r : reservas) {
+                System.out.println(r);
+            }
+        }
     }
 
 }

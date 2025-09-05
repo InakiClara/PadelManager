@@ -126,5 +126,64 @@ public class ReservaDAO {
     }
 
 
+    public Vector<Reserva> listarReservasPorFecha(Date fecha) {
+        Vector<Reserva> reservas = new Vector<>();
+
+        String consulta = "SELECT * FROM Reserva WHERE fecha = ?";
+
+        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
+            ps.setDate(1, new java.sql.Date(fecha.getTime()));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String cedula = rs.getString("cedulaUsuario");
+                    int idCancha1 = rs.getInt("idCancha");
+                    Time horarioInicio = rs.getTime("horarioInicio");
+                    Time horarioFinal = rs.getTime("horarioFinal");
+                    Time horaCancelacion = rs.getTime("horaCancelacion");
+                    String metodoPago = rs.getString("metodoPago");
+                    boolean estaPagada = rs.getBoolean("estaPagada");
+                    boolean estaActiva = rs.getBoolean("estaActiva");
+
+                    reservas.add(new Reserva(cedula, idCancha1, fecha, horarioInicio, horarioFinal, horaCancelacion, metodoPago, estaPagada, estaActiva));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return reservas;
+    }
+
+    public Vector<Reserva> listarReservasPorFechaJugador(Date fecha, String cedulaUsuario) {
+        Vector<Reserva> reservas = new Vector<>();
+
+        String consulta = "SELECT * FROM Reserva r JOIN Usuario u ON r.cedulaUsuario = u.cedula WHERE r.fecha = ? AND r.cedulaUsuario = ?";
+
+        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
+            ps.setDate(1, new java.sql.Date(fecha.getTime()));
+            ps.setString(2, cedulaUsuario);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String cedula = rs.getString("cedulaUsuario");
+                    int idCancha1 = rs.getInt("idCancha");
+                    Time horarioInicio = rs.getTime("horarioInicio");
+                    Time horarioFinal = rs.getTime("horarioFinal");
+                    Time horaCancelacion = rs.getTime("horaCancelacion");
+                    String metodoPago = rs.getString("metodoPago");
+                    boolean estaPagada = rs.getBoolean("estaPagada");
+                    boolean estaActiva = rs.getBoolean("estaActiva");
+
+                    reservas.add(new Reserva(cedula, idCancha1, fecha, horarioInicio, horarioFinal, horaCancelacion, metodoPago, estaPagada, estaActiva));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return reservas;
+    }
+
+
 
 }
