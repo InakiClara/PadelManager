@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
 
-import dao.AdministradorDAO;
-import dao.ReservaDAO;
-import dao.UsuarioDAO;
-import dao.CanchaDAO;
+import dao.*;
 import models.Reserva;
 import models.Usuario;
 import models.Administrador;
@@ -22,12 +19,14 @@ public class Menu {
     private final ReservaDAO reservaDAO;
     private final AdministradorDAO administradorDAO;
     private final CanchaDAO canchaDAO;
+    private final JugadorDAO jugadorDAO;
 
     public Menu() {
         this.usuarioDAO = new UsuarioDAO();
         this.reservaDAO = new ReservaDAO();
         this.administradorDAO = new AdministradorDAO();
         this.canchaDAO = new CanchaDAO();
+        this.jugadorDAO = new JugadorDAO();
     }
 
 
@@ -58,7 +57,10 @@ public class Menu {
                 System.out.println("17. Actualizar Cancha");
                 System.out.println("18. Listar reservas por fecha");
                 System.out.println("19. Listar reservas por fecha y jugador");
-                System.out.println("20. Salir");
+                System.out.println("20. Crear Jugador");
+                System.out.println("21. Actualizar Jugador");
+
+                System.out.println("30. Salir");
                 System.out.println("============================");
                 System.out.print("Opcion: ");
 
@@ -124,6 +126,13 @@ public class Menu {
                         listarReservasPorFechaJugador();
                         break;
                     case 20:
+                        crearJugador();
+                        break;
+                    case 21:
+                        modificarJugador();
+                        break;
+
+                    case 30:
                         System.out.println("Saliendo...");
                         break;
                     default:
@@ -133,7 +142,7 @@ public class Menu {
                 System.out.println("Error: " + e.getMessage());
                 scanner.nextLine();
             }
-        } while (opcion != 18);
+        } while (opcion != 30);
     }
 
     private void listarAdministradores() {
@@ -495,5 +504,102 @@ public class Menu {
             }
         }
     }
+
+    private void crearJugador() {
+        try {
+            System.out.print("Cedula: ");
+            String cedula = scanner.nextLine();
+
+            System.out.print("Nombre: ");
+            String nombre = scanner.nextLine();
+
+            System.out.print("Apellido: ");
+            String apellido = scanner.nextLine();
+
+            System.out.print("Correo: ");
+            String correo = scanner.nextLine();
+
+            System.out.print("Contraseña: ");
+            String contrasenia = scanner.nextLine();
+
+            System.out.print("Teléfono: ");
+            String telefono = scanner.nextLine();
+
+            System.out.print("Fecha de nacimiento (dd/MM/yyyy): ");
+            String fechaStr = scanner.nextLine();
+            Date fechaNacimiento = new SimpleDateFormat("dd/MM/yyyy").parse(fechaStr);
+
+            System.out.print("Categoría: ");
+            String categoria = scanner.nextLine();
+
+            System.out.print("Genero: ");
+            String genero = scanner.nextLine();
+
+            System.out.print("¿Incumple pago?: ");
+            boolean incumplePago = Boolean.parseBoolean(scanner.nextLine());
+
+            System.out.print("¿Está baneado?: ");
+            boolean estaBaneado = Boolean.parseBoolean(scanner.nextLine());
+
+            Jugador nuevoJugador = new Jugador(cedula, nombre, apellido, correo, telefono, contrasenia,
+                    fechaNacimiento, categoria, genero, incumplePago, estaBaneado);
+
+            jugadorDAO.altaJugador(nuevoJugador);
+        } catch (Exception e) {
+            System.out.println("Error al crear jugador: " + e.getMessage());
+        }
+    }
+
+    private void modificarJugador() {
+        try {
+            System.out.print("Cédula del jugador a modificar: ");
+            String cedula = scanner.nextLine();
+
+            System.out.print("Nuevo nombre: ");
+            String nombre = scanner.nextLine();
+
+            System.out.print("Nuevo apellido: ");
+            String apellido = scanner.nextLine();
+
+            System.out.print("Nuevo correo: ");
+            String correo = scanner.nextLine();
+
+            System.out.print("Nueva contraseña: ");
+            String contrasenia = scanner.nextLine();
+
+            System.out.print("Nuevo teléfono: ");
+            String telefono = scanner.nextLine();
+
+            System.out.print("Fecha de nacimiento (dd/MM/yyyy): ");
+            String fechaStr = scanner.nextLine();
+            Date fechaNacimiento = new SimpleDateFormat("dd/MM/yyyy").parse(fechaStr);
+
+            System.out.print("Nueva categoría: ");
+            String categoria = scanner.nextLine();
+
+            System.out.print("Nuevo genero: ");
+            String genero = scanner.nextLine();
+
+            System.out.print("¿Incumple pago?: ");
+            boolean incumplePago = Boolean.parseBoolean(scanner.nextLine());
+
+            System.out.print("¿Está baneado?: ");
+            boolean estaBaneado = Boolean.parseBoolean(scanner.nextLine());
+            Jugador nuevoJugador = new Jugador(cedula, nombre, apellido, correo, telefono, contrasenia,
+                    fechaNacimiento, categoria, genero, incumplePago, estaBaneado);
+
+            Jugador jugador = new Jugador(cedula, nombre, apellido, correo, telefono, contrasenia,
+                    fechaNacimiento, categoria, genero, incumplePago, estaBaneado);
+
+            jugadorDAO.actualizarJugador(jugador);
+            System.out.println("Jugador actualizado correctamente.");
+        } catch (ParseException e) {
+            System.out.println("Formato de fecha incorrecto. Use dd/MM/yyyy");
+        } catch (Exception e) {
+            System.out.println("Error al actualizar jugador: " + e.getMessage());
+        }
+    }
+
+
 
 }
