@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/login.css">
+  <title>Registro</title>
+</head>
+<body>
+  <form class="login-form">
+    <h1>Registro</h1>
+    <img src="/img/IconoPadel.png" alt="iconoPadel">
+
+<div class="form-grid">
+  <div>
+    <div class="form-input-material">
+      <input type="text" name="username" id="username" placeholder="Nombre" required>
+    </div>
+    <div class="form-input-material">
+      <input type="text" name="apellido" id="apellido" placeholder="Apellido" required>
+    </div>
+    <div class="form-input-material">
+      <input type="text" name="cedula" id="cedula" placeholder="Cédula" required>
+    </div>
+  </div>
+  <div>
+    <div class="form-input-material">
+      <input type="tel" name="telefono" id="telefono" placeholder="Teléfono" required>
+    </div>
+    <div class="form-input-material">
+      <input type="email" name="email" id="email" placeholder="Email" required>
+    </div>
+    <div class="form-input-material">
+      <input type="password" name="password" id="password" placeholder="Contraseña" required>
+    </div>
+  </div>
+  <div>
+    <div class="form-input-material">
+      <input type="date" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de nacimiento" required>
+    </div>
+    <div class="form-input-material">
+      <label for="categoria">Categoría</label>
+      <input list="categoria" name="categoria" id="categoriaInput">
+      <datalist id="categoria">
+        <option value="Primera categoría">
+        <option value="Segunda categoría">
+        <option value="Tercera categoría">
+        <option value="Cuarta categoría">
+        <option value="Quinta categoría">
+        <option value="Desconoce">
+      </datalist>
+    </div>
+    <div class="form-input-material">
+      <label for="genero">Género</label>
+      <input list="genero" name="genero" id="generoInput">
+      <datalist id="genero">
+        <option value="Femenino">
+        <option value="Masculino">
+      </datalist>
+    </div>
+  </div>
+</div>
+
+
+    <button type="submit" class="btn btn-primary btn-ghost">Registrar</button>
+    <p>¿Tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+  </form>
+</body>
+</html>
