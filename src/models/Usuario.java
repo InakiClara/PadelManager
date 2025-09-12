@@ -1,4 +1,5 @@
 package models;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class Usuario {
@@ -8,6 +9,7 @@ public class Usuario {
     private String correo;
     private String telefono;
     private String contraseniaCuenta;
+    private Date fechaIngreso;
 
     public Usuario() {
     }
@@ -66,6 +68,14 @@ public class Usuario {
 
     public void setContraseniaCuenta(String contraseniaCuenta) {
         this.contraseniaCuenta = contraseniaCuenta;
+    }
+
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
     }
 
     @Override

@@ -7,6 +7,11 @@ import java.sql.PreparedStatement;
 
 public class JugadorDAO {
     public void altaJugador(Jugador nuevoJugador) {
+        if (!validarContrasenia(nuevoJugador.getContraseniaCuenta())) {
+            System.out.println("La contraseña debe tener mínimo 8 caracteres y al menos una mayúscula.");
+            return;
+        }
+
         String consultaUsuario = "INSERT INTO Usuario (cedula, nombre, apellido, correo, telefono, contraseniaCuenta) VALUES (?, ?, ?, ?, ?, ?)";
         String consultaJugador = "INSERT INTO Jugador (cedula, fechaNacimiento, categoria, genero, incumplePago, estaBaneado) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -40,6 +45,10 @@ public class JugadorDAO {
 
 
     public void actualizarJugador(Jugador jugador) {
+        if (!validarContrasenia(jugador.getContraseniaCuenta())) {
+            System.out.println("La contraseña debe tener mínimo 8 caracteres y al menos una mayúscula.");
+            return;
+        }
         String consultaJugador = "UPDATE Jugador SET fechaNacimiento = ?, categoria = ?, genero = ?, incumplePago = ?, estaBaneado = ? WHERE cedula = ?";
         String consultaUsuario = "UPDATE Usuario SET nombre = ?, apellido = ?, correo = ?, telefono = ?, contraseniaCuenta = ? WHERE cedula = ?";
         try (
@@ -83,4 +92,9 @@ public class JugadorDAO {
             throw new RuntimeException(e);
         }
     }
+
+    private boolean validarContrasenia(String contrasenia) {
+        return contrasenia.length() >= 8 && contrasenia.matches(".*[A-Z].*");
+    }
+
 }
