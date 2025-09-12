@@ -64,18 +64,22 @@ public class Menu {
                 System.out.println("15. Eliminar Usuarios/Jugadores");
                 System.out.println("16. Cantidad de usuarios nuevos por mes");
 
-
                 // ---------- Cancha ----------
                 System.out.println("-----------Cancha---------");
-                System.out.println("16. Crear Cancha");
-                System.out.println("17. Listar Canchas");
-                System.out.println("18. Desactivar Cancha");
-                System.out.println("19. Actualizar Cancha");
+                System.out.println("17. Crear Cancha");
+                System.out.println("18. Listar Canchas");
+                System.out.println("19. Desactivar Cancha");
+                System.out.println("20. Actualizar Cancha");
 
                 // ---------- Jugador ----------
                 System.out.println("-----------Jugador---------");
-                System.out.println("20. Crear Jugador");
-                System.out.println("21. Modificar Jugador");
+                System.out.println("21. Crear Jugador");
+                System.out.println("22. Modificar Jugador");
+
+                // ---------- Estadísticas ----------
+                System.out.println("--------Estadísticas--------");
+                System.out.println("23. Total de reservas");
+                System.out.println("24. Total de ingresos");
 
                 // ---------- Salir ----------
                 System.out.println("30. Salir");
@@ -108,7 +112,6 @@ public class Menu {
                     case 15: eliminarUsuario(); break;
                     case 16: mostrarCantidadUsuariosPorMes(); break;
 
-
                     // Cancha
                     case 17: crearCancha(); break;
                     case 18: canchaDAO.listarCancha(); break;
@@ -119,8 +122,14 @@ public class Menu {
                     case 21: crearJugador(); break;
                     case 22: modificarJugador(); break;
 
+                    // Estadísticas
+                    case 23: reservaDAO.totalReservas(); break;
+                    case 24: mostrarTotalIngresos(); break;
+
+
                     // Salir
                     case 30: System.out.println("Saliendo..."); break;
+
                     default: System.out.println("Opción incorrecta"); break;
                 }
 
@@ -130,6 +139,7 @@ public class Menu {
             }
         } while (opcion != 30);
     }
+
 
     private void listarAdministradores() {
         Vector<Administrador> administradores = administradorDAO.listarAdministradores();
@@ -642,5 +652,17 @@ public class Menu {
         }
     }
 
+    private void mostrarTotalIngresos() {
+        try {
+            System.out.print("Ingrese fecha inicio (yyyy-MM-dd): ");
+            java.sql.Date fechaInicio = java.sql.Date.valueOf(scanner.nextLine());
 
+            System.out.print("Ingrese fecha fin (yyyy-MM-dd): ");
+            java.sql.Date fechaFin = java.sql.Date.valueOf(scanner.nextLine());
+
+            reservaDAO.totalIngresos(fechaInicio, fechaFin);
+        } catch (Exception e) {
+            System.out.println("Error al obtener total de ingresos: " + e.getMessage());
+        }
+    }
 }
