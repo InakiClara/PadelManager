@@ -1,0 +1,207 @@
+[33mcommit 6164664232392b5457ae33c0eee584154b77005b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/14_busquedaAvanzadaCancha[m[33m, [m[1;31morigin/feature/14_busquedaAvanzadaCancha[m[33m)[m
+Author: Inshake <inakiclara2015@hotmail.com>
+Date:   Thu Sep 11 20:38:05 2025 -0300
+
+    Se creó la busqueda avanzada de cancha
+
+[33mcommit eedb84f149c87aea9ee0420e9a3369384af6af25[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 46c86db 6926ae7
+Author: Damián Gastelumendi <108373779+Dekyim@users.noreply.github.com>
+Date:   Fri Sep 5 18:54:23 2025 -0300
+
+    Merge pull request #13 from InakiClara/feature/4_creacion_jugador_jugadorDAO
+    
+    Correcion de errores en JugadorDAO y agregado de sus funciones al menu
+
+[33mcommit 6926ae7150c82238efb5e090287a2824739ea065[m[33m ([m[1;31morigin/feature/4_creacion_jugador_jugadorDAO[m[33m)[m
+Author: Damian Gastelumendi <antonio.gastelumendi@estudiantes.utec.edu.uy>
+Date:   Fri Sep 5 18:52:55 2025 -0300
+
+    Correcion de errores en JugadorDAO y agregado de sus funciones al menu
+
+[33mcommit 46c86dbde80c4aedfa8abc6f90fe1c2fb4655ba5[m
+Merge: 444734d 0871475
+Author: Matías Parente <matias.parente@estudiantes.utec.edu.uy>
+Date:   Thu Sep 4 22:45:45 2025 -0300
+
+    Merge pull request #12 from InakiClara/feature/11_modificacion_administradordao
+    
+    modifique reservasdao
+
+[33mcommit 08714752b52e01649b48d4e1a06570e65cd6a291[m[33m ([m[1;31morigin/feature/11_modificacion_administradordao[m[33m)[m
+Author: Matias <matias.parente@estudiantes.utec.edu.uy>
+Date:   Thu Sep 4 22:45:01 2025 -0300
+
+    modifique reservasdao
+
+[33mcommit 444734d0f4f5f6e07231ed2748b00055c26110d2[m
+Merge: 3a784ed 560687e
+Author: Camilo0o <160657993+camilo0o@users.noreply.github.com>
+Date:   Thu Sep 4 19:09:31 2025 -0300
+
+    Merge pull request #11 from InakiClara/feature/10_actualizarCancha
+    
+    flujos correspondientes a CanchaDAO agregando actualizar cancha
+
+[33mcommit 560687e0b9feed66704b24ea6872e1154721c712[m[33m ([m[1;31morigin/feature/10_actualizarCancha[m[33m)[m
+Author: Camilo <ernesto.fagundez@estudiantes.utec.edu.uy>
+Date:   Thu Sep 4 19:07:59 2025 -0300
+
+    flujos correspondientes a CanchaDAO agregando actualizar cancha
+
+[33mcommit 3a784ed270564c3f4bd3dfb25d2ddb3ffaf43646[m
+Merge: b51776a c0c0823
+Author: Camilo0o <160657993+camilo0o@users.noreply.github.com>
+Date:   Thu Sep 4 18:35:44 2025 -0300
+
+    Merge pull request #10 from InakiClara/feature/9_canchaDAO
+    
+    flujos correspondientes a CanchaDAO
+
+[33mcommit c0c082344163ba432d2e7e14124c64a848ff2a68[m[33m ([m[1;31morigin/feature/9_canchaDAO[m[33m)[m
+Author: Camilo <ernesto.fagundez@estudiantes.utec.edu.uy>
+Date:   Thu Sep 4 18:34:25 2025 -0300
+
+    flujos correspondientes a CanchaDAO
+
+[33mcommit b51776a5296fda9bb454efd4d3d0caaeaeeba71d[m
+Merge: c2682a3 1dbd952
+Author: Matías Parente <matias.parente@estudiantes.utec.edu.uy>
+Date:   Wed Sep 3 22:42:05 2025 -0300
+
+    Merge pull request #8 from InakiClara/feature/8_adminDAO_casos_de_uso
+    
+    modifique administradorDAO e hice sus casos de uso
+
+[33mcommit 1dbd9525e089b7e6d6f0796781fec1a771564e1f[m[33m ([m[1;31morigin/feature/8_adminDAO_casos_de_uso[m[33m)[m
+Author: Matias <matias.parente@estudiantes.utec.edu.uy>
+Date:   Wed Sep 3 22:41:14 2025 -0300
+
+    modifique administradorDAO e hice sus casos de uso
+
+[33mcommit c2682a32088c0fbf83525e54388e1414fdbf0b6e[m
+Merge: 6f1f5aa bbc2344
+Author: Matías Parente <matias.parente@estudiantes.utec.edu.uy>
+Date:   Wed Sep 3 21:01:58 2025 -0300
+
+    Merge pull request #7 from InakiClara/feature/7_modificacion_administradordao
+    
+    Feature/7 modificacion administradordao
+
+[33mcommit bbc234416173428e06eeaf3c72d5a5ffc4ca475c[m[33m ([m[1;31morigin/feature/7_modificacion_administradordao[m[33m)[m
+Author: Matias <matias.parente@estudiantes.utec.edu.uy>
+Date:   Wed Sep 3 21:01:12 2025 -0300
+
+    modifique el administrador
+
+[33mcommit 565f6d40665b4ae9c5cc4889edc85a8289799afe[m
+Merge: 2d916bb 6f1f5aa
+Author: Matias <matias.parente@estudiantes.utec.edu.uy>
+Date:   Wed Sep 3 20:54:56 2025 -0300
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       src/models/Usuario.java
+
+[33mcommit 2d916bbcf5325b23fea4e6f233cd3cba09081111[m
+Author: Matias <matias.parente@estudiantes.utec.edu.uy>
+Date:   Wed Sep 3 20:53:53 2025 -0300
+
+    hola
+
+[33mcommit 6f1f5aa5f695d5e7700540229456f79681bf5700[m
+Merge: 54015a1 240bab3
+Author: Dekyim <108373779+Dekyim@users.noreply.github.com>
+Date:   Wed Sep 3 20:37:08 2025 -0300
+
+    Merge pull request #6 from InakiClara/feature/4_creacion_jugador_jugadorDAO
+    
+    Continuación de creación de Jugador y JugadorDAO y modificación de Us…
+
+[33mcommit 240bab32a7be7b16158b5e3f9b134b8544754af6[m
+Author: Damian Gastelumendi <antonio.gastelumendi@estudiantes.utec.edu.uy>
+Date:   Wed Sep 3 20:36:21 2025 -0300
+
+    Continuación de creación de Jugador y JugadorDAO y modificación de Usuario
+
+[33mcommit 54015a19d505707807dce0cda54295500a058128[m[33m ([m[1;32mmaster[m[33m)[m
+Merge: 46947f3 52735ed
+Author: Camilo0o <160657993+camilo0o@users.noreply.github.com>
+Date:   Tue Sep 2 17:15:03 2025 -0300
+
+    Merge pull request #5 from InakiClara/feature/5_creacion_caso_uso_desactivarCancha
+    
+    commit: caso de uso desactivar cancha en CanchaDAO
+
+[33mcommit 52735ed3078e36c4649a991c443b5c354d32191b[m[33m ([m[1;31morigin/feature/5_creacion_caso_uso_desactivarCancha[m[33m)[m
+Author: Camilo <ernesto.fagundez@estudiantes.utec.edu.uy>
+Date:   Tue Sep 2 17:10:53 2025 -0300
+
+    commit: caso de uso desactivar cancha en CanchaDAO
+
+[33mcommit 46947f34fa76cd75cf2118083e79282b74a39e4a[m
+Merge: 08ab4db 9decfbd
+Author: Dekyim <108373779+Dekyim@users.noreply.github.com>
+Date:   Tue Sep 2 14:28:46 2025 -0300
+
+    Merge pull request #4 from InakiClara/feature/4_creacion_jugador_jugadorDAO
+    
+    Creacion de Jugador
+
+[33mcommit 9decfbd7242fd5de1be5940bff9486bcefb461f1[m
+Author: Damian Gastelumendi <antonio.gastelumendi@estudiantes.utec.edu.uy>
+Date:   Tue Sep 2 14:27:26 2025 -0300
+
+    Creacion de Jugador
+
+[33mcommit 08ab4db49401df9bff162e585cac1790f293036c[m
+Merge: b0f25c7 5b6b1e0
+Author: Camilo0o <160657993+camilo0o@users.noreply.github.com>
+Date:   Mon Sep 1 21:22:04 2025 -0300
+
+    Merge pull request #3 from InakiClara/feature/3_creacion_canchaDAO_Cancha_CanchaHorario
+    
+    commit: casos de uso en CanchaDAO y clases asociadas a cancha
+
+[33mcommit 5b6b1e06b1e41c9133a94afbf8cd757bf5f857a0[m[33m ([m[1;31morigin/feature/3_creacion_canchaDAO_Cancha_CanchaHorario[m[33m)[m
+Author: Camilo <ernesto.fagundez@estudiantes.utec.edu.uy>
+Date:   Mon Sep 1 21:11:44 2025 -0300
+
+    commit: casos de uso en CanchaDAO y clases asociadas a cancha
+
+[33mcommit b0f25c74c7e041d3d98087931685f18a2a4aa84b[m
+Merge: 2af4d91 6c5e3c6
+Author: Matías Parente <matias.parente@estudiantes.utec.edu.uy>
+Date:   Mon Sep 1 02:28:50 2025 -0300
+
+    Merge pull request #2 from InakiClara/feature/2_crear_administradorDAO_Menu
+    
+    Creacion de administradorDAO, administrador, Menu y main. Correcion r…
+
+[33mcommit 6c5e3c6ff00488da7f7ddfbfe12b543000f3285e[m[33m ([m[1;31morigin/feature/2_crear_administradorDAO_Menu[m[33m)[m
+Author: Matias <matias.parente@estudiantes.utec.edu.uy>
+Date:   Mon Sep 1 02:26:42 2025 -0300
+
+    Creacion de administradorDAO, administrador, Menu y main. Correcion reservaDAO y reserva
+
+[33mcommit 2af4d91e1e55f60e0bf588ff672c959b0c4bbda7[m
+Merge: 3011219 c6cb4a9
+Author: Matías Parente <matias.parente@estudiantes.utec.edu.uy>
+Date:   Sun Aug 31 21:24:07 2025 -0300
+
+    Merge pull request #1 from InakiClara/feature/1_crear_DAO
+    
+    Crear reservaDAO, conexion, main, reserva
+
+[33mcommit c6cb4a902c8ce6394c1c38af40b5b84c86fc5369[m[33m ([m[1;31morigin/feature/1_crear_DAO[m[33m)[m
+Author: Matias <matias.parente@estudiantes.utec.edu.uy>
+Date:   Sun Aug 31 21:22:19 2025 -0300
+
+    Crear reservaDAO, conexion, main, reserva
+
+[33mcommit 30112197fbad0404b73b92f379b5e7c5a0b56a59[m
+Author: Matias <matias.parente@estudiantes.utec.edu.uy>
+Date:   Sun Aug 31 19:40:15 2025 -0300
+
+    Creacion de los archivos dao y demas archivos
