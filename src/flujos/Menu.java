@@ -38,106 +38,92 @@ public class Menu {
                 System.out.println("=============================");
                 System.out.println("Menu de Padel Manager");
                 System.out.println("-----------------------------");
+
+                // ---------- Reservas ----------
+                System.out.println("-----------Reservas---------");
                 System.out.println("1. Crear Reserva");
                 System.out.println("2. Cancelar Reserva");
                 System.out.println("3. Modificar Reserva");
                 System.out.println("4. Listar Reservas por Usuario");
-                System.out.println("5. Listar Reservas por cancha");
-                System.out.println("6. Crear Administrador");
-                System.out.println("7. Eliminar Administrador");
-                System.out.println("8. Modificar Administrador");
-                System.out.println("9. Listar Administradores");
-                System.out.println("10. Inicio seccion");
-                System.out.println("11. Cambiar contraseña");
-                System.out.println("12. Listar usuarios");
-                System.out.println("13. Eliminar usuarios/jugadores");
-                System.out.println("14. Crear Cancha");
-                System.out.println("15. Listar Cancha");
-                System.out.println("16. Desactivar Cancha");
-                System.out.println("17. Actualizar Cancha");
-                System.out.println("18. Listar reservas por fecha");
-                System.out.println("19. Listar reservas por fecha y jugador");
-                System.out.println("20. Crear Jugador");
-                System.out.println("21. Actualizar Jugador");
+                System.out.println("5. Listar Reservas por Cancha");
+                System.out.println("6. Listar Reservas por Fecha");
+                System.out.println("7. Listar Reservas por Fecha y Jugador");
 
+                // ---------- Administrador ----------
+                System.out.println("-------Administrador--------");
+                System.out.println("8. Crear Administrador");
+                System.out.println("9. Eliminar Administrador");
+                System.out.println("10. Modificar Administrador");
+                System.out.println("11. Listar Administradores");
+
+                // ---------- Usuarios ----------
+                System.out.println("-----------Usuarios---------");
+                System.out.println("12. Inicio de Sesión");
+                System.out.println("13. Cambiar Contraseña");
+                System.out.println("14. Listar Usuarios");
+                System.out.println("15. Eliminar Usuarios/Jugadores");
+                System.out.println("16. Cantidad de usuarios nuevos por mes");
+
+
+                // ---------- Cancha ----------
+                System.out.println("-----------Cancha---------");
+                System.out.println("16. Crear Cancha");
+                System.out.println("17. Listar Canchas");
+                System.out.println("18. Desactivar Cancha");
+                System.out.println("19. Actualizar Cancha");
+
+                // ---------- Jugador ----------
+                System.out.println("-----------Jugador---------");
+                System.out.println("20. Crear Jugador");
+                System.out.println("21. Modificar Jugador");
+
+                // ---------- Salir ----------
                 System.out.println("30. Salir");
                 System.out.println("============================");
-                System.out.print("Opcion: ");
+                System.out.print("Opción: ");
 
                 opcion = scanner.nextInt();
                 scanner.nextLine();
 
                 switch (opcion) {
-                    case 1:
-                        crearReserva();
-                        break;
-                    case 2:
-                        cancelarReserva();
-                        break;
-                    case 3:
-                        modificarReserva();
-                        break;
-                    case 4:
-                        listarReservasPorUsuario();
-                        break;
-                    case 5:
-                        listarReservaPorCancha();
-                        break;
-                    case 6:
-                        crearAdministrador();
-                        break;
-                    case 7:
-                        eliminarAdministrador();
-                        break;
-                    case 8:
-                        modificarAdministrador();
-                        break;
-                    case 9:
-                        listarAdministradores();
-                        break;
-                    case 10:
-                        iniciarSesion();
-                        break;
-                    case 11:
-                        cambiarContrasenia();
-                        break;
-                    case 12:
-                        listarUsuarios();
-                        break;
-                    case 13:
-                        eliminarUsuario();
-                        break;
-                    case 14:
-                        crearCancha();
-                        break;
-                    case 15:
-                        canchaDAO.listarCancha();
-                        break;
-                    case 16:
-                        desactivarCancha();
-                        break;
-                    case 17:
-                        actualizarCancha();
-                        break;
-                    case 18:
-                        listarReservasPorFecha();
-                        break;
-                    case 19:
-                        listarReservasPorFechaJugador();
-                        break;
-                    case 20:
-                        crearJugador();
-                        break;
-                    case 21:
-                        modificarJugador();
-                        break;
+                    // Reservas
+                    case 1: crearReserva(); break;
+                    case 2: cancelarReserva(); break;
+                    case 3: modificarReserva(); break;
+                    case 4: listarReservasPorUsuario(); break;
+                    case 5: listarReservaPorCancha(); break;
+                    case 6: listarReservasPorFecha(); break;
+                    case 7: listarReservasPorFechaJugador(); break;
 
-                    case 30:
-                        System.out.println("Saliendo...");
-                        break;
-                    default:
-                        System.out.println("Opcion incorrecta");
+                    // Administrador
+                    case 8: crearAdministrador(); break;
+                    case 9: eliminarAdministrador(); break;
+                    case 10: modificarAdministrador(); break;
+                    case 11: listarAdministradores(); break;
+
+                    // Usuarios
+                    case 12: iniciarSesion(); break;
+                    case 13: cambiarContrasenia(); break;
+                    case 14: listarUsuarios(); break;
+                    case 15: eliminarUsuario(); break;
+                    case 16: mostrarCantidadUsuariosPorMes(); break;
+
+
+                    // Cancha
+                    case 17: crearCancha(); break;
+                    case 18: canchaDAO.listarCancha(); break;
+                    case 19: desactivarCancha(); break;
+                    case 20: actualizarCancha(); break;
+
+                    // Jugador
+                    case 21: crearJugador(); break;
+                    case 22: modificarJugador(); break;
+
+                    // Salir
+                    case 30: System.out.println("Saliendo..."); break;
+                    default: System.out.println("Opción incorrecta"); break;
                 }
+
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
                 scanner.nextLine();
@@ -225,6 +211,9 @@ public class Menu {
 
     private void crearReserva() {
         try {
+            System.out.println("Usuarios disponibles:");
+            listarUsuarios(); // Mostrar usuarios para no tener que memorizar cédulas
+
             System.out.print("Cédula del jugador: ");
             String cedulaUsuario = scanner.nextLine();
 
@@ -241,9 +230,9 @@ public class Menu {
             String horaInicioStr = scanner.nextLine();
             Time horarioInicio = Time.valueOf(horaInicioStr + ":00");
 
-            System.out.print("Horario fin (HH:mm): ");
-            String horaFinStr = scanner.nextLine();
-            Time horarioFin = Time.valueOf(horaFinStr + ":00");
+            long millisInicio = horarioInicio.getTime();
+            long millisFin = millisInicio + (90 * 60 * 1000); // 90 minutos
+            Time horarioFin = new Time(millisFin);
 
             System.out.print("Método de pago: ");
             String metodoPago = scanner.nextLine();
@@ -251,10 +240,14 @@ public class Menu {
             Reserva reserva = new Reserva(cedulaUsuario, idCancha, fecha, horarioInicio, horarioFin, null, metodoPago, false, true);
             reservaDAO.crearReserva(reserva);
 
+            System.out.println("Reserva creada: " + reserva);
+
         } catch (ParseException e) {
             System.out.println("Formato de fecha incorrecto. Use dd/MM/yyyy");
         }
     }
+
+
 
 
     private void cancelarReserva() {
@@ -266,35 +259,56 @@ public class Menu {
     }
 
     private void modificarReserva() {
-        System.out.print("ID de la reserva: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Nueva fecha (dd/MM/yyyy): ");
-        String fechaStr = scanner.nextLine();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date fecha = null;
         try {
-            fecha = sdf.parse(fechaStr);
-        } catch (ParseException e) {
-            System.out.println("Formato de fecha incorrecto.");
-            return;
+            System.out.print("ID de la reserva: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.println("Usuarios disponibles:");
+            listarUsuarios();  // Mostrar todos los usuarios antes de pedir cédula
+
+            System.out.print("Cédula del jugador: ");
+            String cedulaUsuario = scanner.nextLine();
+
+            System.out.print("Nueva fecha (dd/MM/yyyy): ");
+            String fechaStr = scanner.nextLine();
+            Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(fechaStr);
+
+            System.out.print("Nuevo horario inicio (HH:mm): ");
+            String horaInicioStr = scanner.nextLine();
+            Time horarioInicio = Time.valueOf(horaInicioStr + ":00");
+
+            long millisInicio = horarioInicio.getTime();
+            long millisFin = millisInicio + (90 * 60 * 1000);
+            Time horarioFin = new Time(millisFin);
+
+            System.out.println("Canchas disponibles:");
+            canchaDAO.listarCancha();  // Mostrar todas las canchas
+
+            System.out.print("Ingrese nuevo ID de la cancha: ");
+            int idCancha = scanner.nextInt();
+            scanner.nextLine();
+
+            Reserva reserva = new Reserva(cedulaUsuario, idCancha, fecha, horarioInicio, horarioFin, null, "", false, true);
+            reserva.setId(id);
+
+            reservaDAO.actualizarReserva(reserva);
+            System.out.println("Reserva modificada correctamente: " + reserva);
+
+        } catch (Exception e) {
+            System.out.println("Error al modificar la reserva: " + e.getMessage());
         }
-
-        System.out.print("Nuevo horario inicio (HH:mm): ");
-        String horaInicioStr = scanner.nextLine();
-        Time horarioInicio = Time.valueOf(horaInicioStr + ":00");
-
-        System.out.print("Nuevo horario fin (HH:mm): ");
-        String horaFinStr = scanner.nextLine();
-        Time horarioFin = Time.valueOf(horaFinStr + ":00");
-
-        Reserva reserva = new Reserva("", 0, fecha, horarioInicio, horarioFin, null, "", false, true);
-        reservaDAO.actualizarReserva(reserva);
-
     }
 
+
+
+
+
     private void listarReservasPorUsuario() {
+        // Mostrar todos los usuarios antes de pedir cédula
+        System.out.println("Usuarios disponibles:");
+        listarUsuarios();  // Llama a la función ya existente
+
         System.out.print("Cédula del usuario: ");
         String cedulaUsuario = scanner.nextLine();
 
@@ -308,6 +322,7 @@ public class Menu {
             }
         }
     }
+
 
     private void listarReservaPorCancha() {
         System.out.print("ID de la cancha: ");
@@ -332,7 +347,7 @@ public class Menu {
         System.out.print("Ingrese contraseña: ");
         String contrasenia = scanner.nextLine();
 
-        administradorDAO.inicioSesion(cedula, contrasenia);
+        usuarioDAO.inicioSesion(cedula, contrasenia);
     }
 
     private void cambiarContrasenia() {
@@ -345,14 +360,14 @@ public class Menu {
         System.out.print("Ingrese la nueva contraseña: ");
         String nueva = scanner.nextLine();
 
-        administradorDAO.cambiarContrasenia(cedula, actual, nueva);
+        usuarioDAO.cambiarContrasenia(cedula, actual, nueva);
     }
 
     private void listarUsuarios() {
         System.out.print("Ingrese criterio de búsqueda (cédula, nombre o apellido): ");
         String criterio = scanner.nextLine();
 
-        Vector<Usuario> usuarios = administradorDAO.listarUsuarios(criterio);
+        Vector<Usuario> usuarios = usuarioDAO.listarUsuarios(criterio);
 
         if (usuarios.isEmpty()) {
             System.out.println("No se encontraron usuarios que coincidan con el criterio.");
@@ -370,6 +385,9 @@ public class Menu {
     }
 
     private void eliminarUsuario() {
+        System.out.println("Usuarios disponibles:");
+        listarUsuarios(); // Mostrar usuarios antes de pedir cédula
+
         System.out.print("Ingrese la cédula del usuario a eliminar: ");
         String cedula = scanner.nextLine();
 
@@ -377,11 +395,12 @@ public class Menu {
         String confirmacion = scanner.nextLine();
 
         if (confirmacion.equalsIgnoreCase("S")) {
-            administradorDAO.desactivarUsuarioPorCedula(cedula);
+            usuarioDAO.desactivarUsuarioPorCedula(cedula);
         } else {
             System.out.println("Operación cancelada.");
         }
     }
+
     private void crearCancha() {
         System.out.println("Ingrese ID:");
         int id = scanner.nextInt();
@@ -432,6 +451,9 @@ public class Menu {
         }
     }
     private void actualizarCancha() {
+        System.out.println("Canchas disponibles:");
+        canchaDAO.listarCancha();
+
         System.out.print("Ingrese el ID de la cancha a actualizar: ");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -459,13 +481,14 @@ public class Menu {
             Time horario = Time.valueOf(horaStr + ":00");
             horarios.add(horario);
         }
-        CanchaHorario canchaHorario = new CanchaHorario(id, horarios);
 
+        CanchaHorario canchaHorario = new CanchaHorario(id, horarios);
         Cancha canchaActualizar = new Cancha(id, esTechada, precio, estaDisponible, canchaHorario);
         canchaActualizar.setId(id);
 
         canchaDAO.actualizarCancha(canchaActualizar);
     }
+
 
     private void listarReservasPorFecha() {
         System.out.print("Ingrese la fecha para filtrar (formato: yyyy-MM-dd): ");
@@ -487,23 +510,26 @@ public class Menu {
     private void listarReservasPorFechaJugador() {
         System.out.print("Ingrese la fecha para filtrar (formato: yyyy-MM-dd): ");
         String fechaString = scanner.nextLine();
-
         java.sql.Date fecha = java.sql.Date.valueOf(fechaString);
+
+        // Mostrar todos los usuarios antes de pedir cédula
+        System.out.println("Usuarios disponibles:");
+        listarUsuarios();
 
         System.out.print("Cedula del usuario: ");
         String cedula = scanner.nextLine();
-        scanner.nextLine();
 
-        Vector<Reserva> reservas = reservaDAO.listarReservasPorFechaJugador(fecha,cedula);
+        Vector<Reserva> reservas = reservaDAO.listarReservasPorFechaJugador(fecha, cedula);
 
         if (reservas.isEmpty()) {
-            System.out.println("No se encontraron reservas para esta fecha.");
+            System.out.println("No se encontraron reservas para esta fecha y usuario.");
         } else {
             for (Reserva r : reservas) {
                 System.out.println(r);
             }
         }
     }
+
 
     private void crearJugador() {
         try {
@@ -551,6 +577,9 @@ public class Menu {
     }
 
     private void modificarJugador() {
+        System.out.println("Jugadores disponibles:");
+        listarUsuarios(); // Listar usuarios antes de pedir cédula
+
         try {
             System.out.print("Cédula del jugador a modificar: ");
             String cedula = scanner.nextLine();
@@ -580,26 +609,38 @@ public class Menu {
             System.out.print("Nuevo genero: ");
             String genero = scanner.nextLine();
 
-            System.out.print("¿Incumple pago?: ");
+            System.out.print("¿Incumple pago? (true/false): ");
             boolean incumplePago = Boolean.parseBoolean(scanner.nextLine());
 
-            System.out.print("¿Está baneado?: ");
+            System.out.print("¿Está baneado? (true/false): ");
             boolean estaBaneado = Boolean.parseBoolean(scanner.nextLine());
-            Jugador nuevoJugador = new Jugador(cedula, nombre, apellido, correo, telefono, contrasenia,
-                    fechaNacimiento, categoria, genero, incumplePago, estaBaneado);
 
             Jugador jugador = new Jugador(cedula, nombre, apellido, correo, telefono, contrasenia,
                     fechaNacimiento, categoria, genero, incumplePago, estaBaneado);
 
             jugadorDAO.actualizarJugador(jugador);
             System.out.println("Jugador actualizado correctamente.");
-        } catch (ParseException e) {
-            System.out.println("Formato de fecha incorrecto. Use dd/MM/yyyy");
         } catch (Exception e) {
             System.out.println("Error al actualizar jugador: " + e.getMessage());
         }
     }
 
+
+    private void mostrarCantidadUsuariosPorMes() {
+        try {
+            System.out.print("Ingrese el mes (1-12): ");
+            int mes = scanner.nextInt();
+            System.out.print("Ingrese el año (yyyy): ");
+            int anio = scanner.nextInt();
+            scanner.nextLine();
+
+            int total = usuarioDAO.contarUsuariosPorMes(mes, anio);
+            System.out.println("Cantidad de usuarios ingresados en " + mes + "/" + anio + ": " + total);
+        } catch (Exception e) {
+            System.out.println("Error al obtener la cantidad: " + e.getMessage());
+            scanner.nextLine();
+        }
+    }
 
 
 }
