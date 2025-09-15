@@ -120,6 +120,7 @@ public class Menu {
                     case 19: desactivarCancha(); break;
                     case 20: actualizarCancha(); break;
                     case 21: bloquearCanchaMantenimiento();break;
+                    case 22: desbloquearCancha();break;
 
                     // Jugador
                     case 23: crearJugador(); break;
@@ -671,16 +672,14 @@ public class Menu {
     private void bloquearCanchaMantenimiento(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("BLOQUEAR CANCHA POR MANTENIMIENTO");
-        canchaDAO.listarCancha();
 
-        System.out.print("Ingrese el ID de la cancha que desea bloquear: ");
-        int idCancha = scanner.nextInt();
         Vector<Cancha> listaCanchas = canchaDAO.listarCancha();
         if (listaCanchas.isEmpty()) {
-            System.out.println(" No hay canchas registradas.");
+            System.out.println("No hay canchas registradas.");
             return;
         }
-        System.out.println("📋 Lista de canchas:");
+
+        System.out.println("Lista de canchas:");
         for (Cancha c : listaCanchas) {
             System.out.printf("ID: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
                     c.getId(), c.getPrecio(),
@@ -690,6 +689,7 @@ public class Menu {
 
         System.out.print("Ingrese el ID de la cancha que desea bloquear: ");
         int idSeleccionado = scanner.nextInt();
+
         Cancha canchaSeleccionada = null;
         for (Cancha c : listaCanchas) {
             if (c.getId() == idSeleccionado) {
@@ -697,10 +697,17 @@ public class Menu {
                 break;
             }
         }
+
         if (canchaSeleccionada == null) {
             System.out.println("No se encontró una cancha con ese ID.");
             return;
         }
+
+        if (!canchaSeleccionada.isEstaDispoonible()) {
+            System.out.println("La cancha ya está bloqueada o no disponible.");
+            return;
+        }
+
         System.out.print("¿Está seguro que desea bloquear esta cancha por mantenimiento? (s/n): ");
         String confirmacion = scanner.next();
 
@@ -710,4 +717,48 @@ public class Menu {
             System.out.println("Operación cancelada.");
         }
     }
+
+    private void desbloquearCancha(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("DESBLOQUEAR CANCHA");
+
+        Vector<Cancha> listaCanchas = canchaDAO.listarCancha();
+        if (listaCanchas.isEmpty()) {
+            System.out.println("No hay canchas registradas.");
+            return;
+        }
+
+
+
+        System.out.print("Ingrese el ID de la cancha que desea desbloquear: ");
+        int idSeleccionado = scanner.nextInt();
+
+        Cancha canchaSeleccionada = null;
+        for (Cancha c : listaCanchas) {
+            if (c.getId() == idSeleccionado) {
+                canchaSeleccionada = c;
+                break;
+            }
+        }
+
+        if (canchaSeleccionada == null) {
+            System.out.println("No se encontró una cancha con ese ID.");
+            return;
+        }
+
+        if (canchaSeleccionada.isEstaDispoonible()) {
+            System.out.println("La cancha ya está disponible.");
+            return;
+        }
+
+        System.out.print("¿Está seguro que desea desbloquear esta cancha? (s/n): ");
+        String confirmacion = scanner.next();
+
+        if (confirmacion.equalsIgnoreCase("s")) {
+            canchaDAO.desbloquearCancha(canchaSeleccionada);
+        } else {
+            System.out.println("Operación cancelada.");
+        }
+    }
+
 }
