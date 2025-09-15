@@ -118,7 +118,7 @@ public class CanchaDAO {
             }
         }
     }
-    public void listarCancha(){
+    public Vector<Cancha> listarCancha(){
         String consultaCanchas = "SELECT * FROM Cancha;";
         String consultaHorarios = "SELECT horario FROM CanchaHorario WHERE idCancha = ?";
         try (Connection conn = DatabaseConnection.getInstancia().getConnection();
@@ -157,6 +157,7 @@ public class CanchaDAO {
         } catch (Exception e) {
             throw new RuntimeException("Error al listar canchas: " + e.getMessage(), e);
         }
+        return null;
     }
     public void desactivarCancha(Cancha canchaDesactivar){
         String consultaReservas = "SELECT COUNT(*) FROM Reserva WHERE idCancha = ? AND estaActiva = TRUE";
@@ -276,6 +277,33 @@ public Vector<Cancha> busquedaAvanzada(Double minPrecio, Double maxPrecio,
     }
 
     return listaCanchas;
+}
+public void bloquearCanchaPorMantenimiento(Cancha canchaBloquear){
+    String consulta = "UPDATE Cancha SET estaDisponible = ? WHERE id = ?";
+    Connection conn = null;
+    PreparedStatement ps = null;
+    try {
+        conn = DatabaseConnection.getInstancia().getConnection();
+        ps = conn.prepareStatement(consulta);
+        ps.setBoolean(1, false);
+        ps.setInt(2, canchaBloquear.getId());
+        int filasAfectadas = ps.executeUpdate();
+        if (filasAfectadas > 0) {
+            System.out.println("Cancha bloqueada por mantenimiento (ID: " + canchaBloquear.getId() + ")");
+        }else{
+            System.out.println("No se encontró ninguna cancha con ese ID.");
+        }
+    }catch (SQLException e){
+        throw new RuntimeException("Error al bloquear la cancha: " + e.getMessage(), e);
+    }finally {
+        try {
+            if (ps != null) ps.close();
+            if(conn != null) conn.close();
+        }catch (SQLException e) {
+            System.err.println("Error al cerrar recursos: " + e.getMessage());
+        }
+    }
+
 }
 
 
