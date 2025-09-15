@@ -68,18 +68,20 @@ public class Menu {
                 System.out.println("-----------Cancha---------");
                 System.out.println("17. Crear Cancha");
                 System.out.println("18. Listar Canchas");
-                System.out.println("19. Desactivar Cancha");
+                System.out.println("19. Eliminar Cancha");
                 System.out.println("20. Actualizar Cancha");
+                System.out.println("21. Bloquear Cancha por mantenimiento");
+                System.out.println("22. Desbloquear Cancha");
 
                 // ---------- Jugador ----------
                 System.out.println("-----------Jugador---------");
-                System.out.println("21. Crear Jugador");
-                System.out.println("22. Modificar Jugador");
+                System.out.println("23. Crear Jugador");
+                System.out.println("24. Modificar Jugador");
 
                 // ---------- Estadísticas ----------
                 System.out.println("--------Estadísticas--------");
-                System.out.println("23. Total de reservas");
-                System.out.println("24. Total de ingresos");
+                System.out.println("25. Total de reservas");
+                System.out.println("26. Total de ingresos");
 
                 // ---------- Salir ----------
                 System.out.println("30. Salir");
@@ -117,14 +119,15 @@ public class Menu {
                     case 18: canchaDAO.listarCancha(); break;
                     case 19: desactivarCancha(); break;
                     case 20: actualizarCancha(); break;
+                    case 21: bloquearCanchaMantenimiento();break;
 
                     // Jugador
-                    case 21: crearJugador(); break;
-                    case 22: modificarJugador(); break;
+                    case 23: crearJugador(); break;
+                    case 24: modificarJugador(); break;
 
                     // Estadísticas
-                    case 23: reservaDAO.totalReservas(); break;
-                    case 24: mostrarTotalIngresos(); break;
+                    case 25: reservaDAO.totalReservas(); break;
+                    case 26: mostrarTotalIngresos(); break;
 
 
                     // Salir
@@ -663,6 +666,48 @@ public class Menu {
             reservaDAO.totalIngresos(fechaInicio, fechaFin);
         } catch (Exception e) {
             System.out.println("Error al obtener total de ingresos: " + e.getMessage());
+        }
+    }
+    private void bloquearCanchaMantenimiento(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("BLOQUEAR CANCHA POR MANTENIMIENTO");
+        canchaDAO.listarCancha();
+
+        System.out.print("Ingrese el ID de la cancha que desea bloquear: ");
+        int idCancha = scanner.nextInt();
+        Vector<Cancha> listaCanchas = canchaDAO.listarCancha();
+        if (listaCanchas.isEmpty()) {
+            System.out.println(" No hay canchas registradas.");
+            return;
+        }
+        System.out.println("📋 Lista de canchas:");
+        for (Cancha c : listaCanchas) {
+            System.out.printf("ID: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
+                    c.getId(), c.getPrecio(),
+                    c.isEsTechada() ? "Sí" : "No",
+                    c.isEstaDispoonible() ? "Sí" : "No");
+        }
+
+        System.out.print("Ingrese el ID de la cancha que desea bloquear: ");
+        int idSeleccionado = scanner.nextInt();
+        Cancha canchaSeleccionada = null;
+        for (Cancha c : listaCanchas) {
+            if (c.getId() == idSeleccionado) {
+                canchaSeleccionada = c;
+                break;
+            }
+        }
+        if (canchaSeleccionada == null) {
+            System.out.println("No se encontró una cancha con ese ID.");
+            return;
+        }
+        System.out.print("¿Está seguro que desea bloquear esta cancha por mantenimiento? (s/n): ");
+        String confirmacion = scanner.next();
+
+        if (confirmacion.equalsIgnoreCase("s")) {
+            canchaDAO.bloquearCanchaPorMantenimiento(canchaSeleccionada);
+        } else {
+            System.out.println("Operación cancelada.");
         }
     }
 }
