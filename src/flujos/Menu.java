@@ -48,45 +48,54 @@ public class Menu {
                 System.out.println("5. Listar Reservas por Cancha");
                 System.out.println("6. Listar Reservas por Fecha");
                 System.out.println("7. Listar Reservas por Fecha y Jugador");
+                System.out.println("8. Consultar estado de pago de una reserva");
+                System.out.println("9. Pagar reserva");
 
                 // ---------- Administrador ----------
                 System.out.println("-------Administrador--------");
-                System.out.println("8. Crear Administrador");
-                System.out.println("9. Eliminar Administrador");
-                System.out.println("10. Modificar Administrador");
-                System.out.println("11. Listar Administradores");
+                System.out.println("10. Crear Administrador");
+                System.out.println("11. Eliminar Administrador");
+                System.out.println("12. Modificar Administrador");
+                System.out.println("13. Listar Administradores");
 
                 // ---------- Usuarios ----------
                 System.out.println("-----------Usuarios---------");
-                System.out.println("12. Inicio de Sesión");
-                System.out.println("13. Cambiar Contraseña");
-                System.out.println("14. Listar todos los Usuarios");
-                System.out.println("15. Listar Usuarios por parametro");
-                System.out.println("16. Eliminar Usuarios/Jugadores");
-                System.out.println("17. Cantidad de usuarios nuevos por mes");
+                System.out.println("14. Inicio de Sesión");
+                System.out.println("15. Cambiar Contraseña");
+                System.out.println("16. Listar Usuarios");
+                System.out.println("17. Eliminar Usuarios/Jugadores");
+                System.out.println("18. Cantidad de usuarios nuevos por mes");
 
                 // ---------- Cancha ----------
                 System.out.println("-----------Cancha---------");
-                System.out.println("18. Crear Cancha");
-                System.out.println("19. Listar Canchas");
-                System.out.println("20. Eliminar Cancha");
-                System.out.println("21. Actualizar Cancha");
-                System.out.println("22. Bloquear Cancha por mantenimiento");
-                System.out.println("23. Desbloquear Cancha");
+                System.out.println("19. Crear Cancha");
+                System.out.println("20. Listar Canchas");
+                System.out.println("21. Eliminar Cancha");
+                System.out.println("22. Actualizar Cancha");
+                System.out.println("23. Bloquear Cancha por mantenimiento");
+
 
                 // ---------- Jugador ----------
                 System.out.println("-----------Jugador---------");
                 System.out.println("24. Crear Jugador");
                 System.out.println("25. Modificar Jugador");
+                System.out.println("26. Eliminar Jugador");
+                System.out.println("27. Listar Jugadores");
+                System.out.println("28. Analizar baneos de jugadores");
+                System.out.println("29. Listar baenados");
+                System.out.println("30. Desbanear jugadores");
+
 
                 // ---------- Estadísticas ----------
                 System.out.println("--------Estadísticas--------");
-                System.out.println("26. Total de reservas");
-                System.out.println("27. Total de ingresos");
+                System.out.println("31. Total de reservas");
+                System.out.println("32. Total de ingresos");
+
 
                 // ---------- Salir ----------
-                System.out.println("30. Salir");
+                System.out.println("33. Salir");
                 System.out.println("============================");
+                System.out.println("Ingrese el numero de la opcion que desea");
                 System.out.print("Opción: ");
 
                 opcion = scanner.nextInt();
@@ -101,40 +110,47 @@ public class Menu {
                     case 5: listarReservaPorCancha(); break;
                     case 6: listarReservasPorFecha(); break;
                     case 7: listarReservasPorFechaJugador(); break;
+                    case 8: consultarEstadoPago(); break;
+                    case 9: pagarReserva(); break;
 
                     // Administrador
-                    case 8: crearAdministrador(); break;
-                    case 9: eliminarAdministrador(); break;
-                    case 10: modificarAdministrador(); break;
-                    case 11: listarAdministradores(); break;
+                    case 10: crearAdministrador(); break;
+                    case 11: eliminarAdministrador(); break;
+                    case 12: modificarAdministrador(); break;
+                    case 13: listarAdministradores(); break;
 
                     // Usuarios
-                    case 12: iniciarSesion(); break;
-                    case 13: cambiarContrasenia(); break;
-                    case 14: listarTodosLosUsuarios(); break;
-                    case 15: listarUsuarios(); break;
-                    case 16: eliminarUsuario(); break;
-                    case 17: mostrarCantidadUsuariosPorMes(); break;
+
+                    case 14: iniciarSesion(); break;
+                    case 15: cambiarContrasenia(); break;
+                    case 16: listarUsuarios(); break;
+                    case 17: eliminarUsuario(); break;
+                    case 18: mostrarCantidadUsuariosPorMes(); break;
 
                     // Cancha
-                    case 18: crearCancha(); break;
-                    case 19: canchaDAO.listarCancha(); break;
-                    case 20: desactivarCancha(); break;
-                    case 21: actualizarCancha(); break;
-                    case 22: bloquearCanchaMantenimiento();break;
-                    case 23: desbloquearCancha();break;
+                    case 19: crearCancha(); break;
+                    case 20: canchaDAO.listarCancha(); break;
+                    case 21: desactivarCancha(); break;
+                    case 22: actualizarCancha(); break;
+                    case 23: bloquearCanchaMantenimiento();break;
+                    case 24: desbloquearCancha();break;
 
                     // Jugador
-                    case 24: crearJugador(); break;
-                    case 25: modificarJugador(); break;
+                    case 25: crearJugador(); break;
+                    case 26: modificarJugador(); break;
+                    case 27: eliminarJugador(); break;
+                    case 28: listarJugadores(); break;
+                    case 29: jugadorDAO.analizarBaneos(); break;
+                    case 30: listarJugadoresBaneados(); break;
+                    case 31: desbanearJugador(); break;
+
 
                     // Estadísticas
-                    case 26: reservaDAO.totalReservas(); break;
-                    case 27: mostrarTotalIngresos(); break;
-
+                    case 32: reservaDAO.totalReservas(); break;
+                    case 33: mostrarTotalIngresos(); break;
 
                     // Salir
-                    case 30: System.out.println("Saliendo..."); break;
+                    case 34: System.out.println("Saliendo..."); break;
 
                     default: System.out.println("Opción incorrecta"); break;
                 }
@@ -143,7 +159,7 @@ public class Menu {
                 System.out.println("Error: " + e.getMessage());
                 scanner.nextLine();
             }
-        } while (opcion != 30);
+        } while (opcion != 33);
     }
 
 
@@ -155,6 +171,40 @@ public class Menu {
         } else {
             for (Administrador a : administradores) {
                 System.out.println(a);
+            }
+        }
+    }
+
+    private void desbanearJugador() {
+        System.out.print("Lista de jugadores: ");
+        listarJugadoresBaneados();
+
+        System.out.print("Ingrese la cédula del jugador a desbanear: ");
+        String cedula = scanner.nextLine();
+
+        jugadorDAO.desbanearJugador(cedula);
+    }
+
+    private void listarJugadoresBaneados() {
+        Vector<Jugador> jugadores = jugadorDAO.listarJugadoresBaneados();
+
+        if (jugadores.isEmpty()) {
+            System.out.println("Listado no encontrado");
+        } else {
+            for (Jugador j : jugadores) {
+                System.out.println(j);
+            }
+        }
+    }
+
+    private void listarJugadores() {
+        Vector<Jugador> jugadores = jugadorDAO.listarJugadores();
+
+        if (jugadores.isEmpty()) {
+            System.out.println("Listado no encontrado");
+        } else {
+            for (Jugador j : jugadores) {
+                System.out.println(j);
             }
         }
     }
@@ -224,6 +274,17 @@ public class Menu {
         administradorDAO.eliminarAdministrador(admin);
 
     }
+
+    private void eliminarJugador() {
+        listarUsuarios();
+
+        System.out.print("Cédula del jugador a eliminar: ");
+        String cedula = scanner.nextLine();
+
+        jugadorDAO.eliminarJugador(cedula);
+
+    }
+
 
     private void crearReserva() {
         try {
@@ -562,7 +623,6 @@ public class Menu {
         }
     }
 
-
     private void crearJugador() {
         try {
             System.out.print("Cedula: ");
@@ -686,6 +746,23 @@ public class Menu {
             System.out.println("Error al obtener total de ingresos: " + e.getMessage());
         }
     }
+
+    private void consultarEstadoPago() {
+        System.out.print("Ingrese el ID de la reserva: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        reservaDAO.obtenerEstadoPago(id);
+    }
+
+    private void pagarReserva() {
+        System.out.print("Ingrese el ID de la reserva a pagar: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        reservaDAO.pagarReserva(id);
+    }
+
     private void bloquearCanchaMantenimiento(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("BLOQUEAR CANCHA POR MANTENIMIENTO");
@@ -695,6 +772,15 @@ public class Menu {
             System.out.println("No hay canchas registradas.");
             return;
         }
+
+        System.out.println("Lista de canchas:");
+        for (Cancha c : listaCanchas) {
+            System.out.printf("ID: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
+                    c.getId(), c.getPrecio(),
+                    c.isEsTechada() ? "Sí" : "No",
+                    c.isEstaDispoonible() ? "Sí" : "No");
+        }
+
 
         System.out.print("Ingrese el ID de la cancha que desea bloquear: ");
         int idSeleccionado = scanner.nextInt();

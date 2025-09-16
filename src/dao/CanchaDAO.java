@@ -227,67 +227,67 @@ public class CanchaDAO {
         }
     }
 
-public Vector<Cancha> busquedaAvanzada(Double minPrecio, Double maxPrecio, 
-                                       Boolean esTechada, Boolean disponible, 
-                                       Date fecha, Time hora) {
-    Vector<Cancha> listaCanchas = new Vector<>();
-    StringBuilder consulta = new StringBuilder(
-        "SELECT c.* FROM Cancha c " +
-        "JOIN CanchaHorario ch ON c.id = ch.idCancha " +
-        "WHERE 1=1 "
-    );
+    public Vector<Cancha> busquedaAvanzada(Double minPrecio, Double maxPrecio,
+                                           Boolean esTechada, Boolean disponible,
+                                           Date fecha, Time hora) {
+        Vector<Cancha> listaCanchas = new Vector<>();
+        StringBuilder consulta = new StringBuilder(
+                "SELECT c.* FROM Cancha c " +
+                        "JOIN CanchaHorario ch ON c.id = ch.idCancha " +
+                        "WHERE 1=1 "
+        );
 
 
-    if (minPrecio != null) consulta.append("AND c.precio >= ? ");
-    if (maxPrecio != null) consulta.append("AND c.precio <= ? ");
-    if (esTechada != null) consulta.append("AND c.esTechada = ? ");
-    if (disponible != null) consulta.append("AND c.estaDisponible = ? ");
-    if (hora != null) consulta.append("AND ch.horario = ? ");
+        if (minPrecio != null) consulta.append("AND c.precio >= ? ");
+        if (maxPrecio != null) consulta.append("AND c.precio <= ? ");
+        if (esTechada != null) consulta.append("AND c.esTechada = ? ");
+        if (disponible != null) consulta.append("AND c.estaDisponible = ? ");
+        if (hora != null) consulta.append("AND ch.horario = ? ");
 
 
-    try (Connection conn = DatabaseConnection.getInstancia().getConnection();
-         PreparedStatement ps = conn.prepareStatement(consulta.toString())) {
+        try (Connection conn = DatabaseConnection.getInstancia().getConnection();
+             PreparedStatement ps = conn.prepareStatement(consulta.toString())) {
 
-        int index = 1;
-        if (minPrecio != null) ps.setDouble(index++, minPrecio);
-        if (maxPrecio != null) ps.setDouble(index++, maxPrecio);
-        if (esTechada != null) ps.setBoolean(index++, esTechada);
-        if (disponible != null) ps.setBoolean(index++, disponible);
-        if (hora != null) ps.setTime(index++, hora);
+            int index = 1;
+            if (minPrecio != null) ps.setDouble(index++, minPrecio);
+            if (maxPrecio != null) ps.setDouble(index++, maxPrecio);
+            if (esTechada != null) ps.setBoolean(index++, esTechada);
+            if (disponible != null) ps.setBoolean(index++, disponible);
+            if (hora != null) ps.setTime(index++, hora);
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            int id = rs.getInt("id");
-            double precio = rs.getDouble("precio");
-            boolean techada = rs.getBoolean("esTechada");
-            boolean estaDisponible = rs.getBoolean("estaDisponible");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                double precio = rs.getDouble("precio");
+                boolean techada = rs.getBoolean("esTechada");
+                boolean estaDisponible = rs.getBoolean("estaDisponible");
 
-            // Traer horarios de esa cancha
-            PreparedStatement psHorarios = conn.prepareStatement(
-                "SELECT horario FROM CanchaHorario WHERE idCancha = ?");
-            psHorarios.setInt(1, id);
-            ResultSet rsHorarios = psHorarios.executeQuery();
-            Vector<Time> horarios = new Vector<>();
-            while (rsHorarios.next()) {
-                horarios.add(rsHorarios.getTime("horario"));
+                // Traer horarios de esa cancha
+                PreparedStatement psHorarios = conn.prepareStatement(
+                        "SELECT horario FROM CanchaHorario WHERE idCancha = ?");
+                psHorarios.setInt(1, id);
+                ResultSet rsHorarios = psHorarios.executeQuery();
+                Vector<Time> horarios = new Vector<>();
+                while (rsHorarios.next()) {
+                    horarios.add(rsHorarios.getTime("horario"));
+                }
+                rsHorarios.close();
+                psHorarios.close();
+
+                CanchaHorario canchaHorario = new CanchaHorario(id, horarios);
+                Cancha cancha = new Cancha(id, techada, precio, estaDisponible, canchaHorario);
+                listaCanchas.add(cancha);
             }
-            rsHorarios.close();
-            psHorarios.close();
 
-            CanchaHorario canchaHorario = new CanchaHorario(id, horarios);
-            Cancha cancha = new Cancha(id, techada, precio, estaDisponible, canchaHorario);
-            listaCanchas.add(cancha);
+            if (listaCanchas.isEmpty()) {
+                System.out.println("No se encontraron canchas con esos criterios.");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error en búsqueda avanzada: " + e.getMessage(), e);
         }
 
-        if (listaCanchas.isEmpty()) {
-            System.out.println("No se encontraron canchas con esos criterios.");
-        }
-
-    } catch (SQLException e) {
-        throw new RuntimeException("Error en búsqueda avanzada: " + e.getMessage(), e);
-    }
-
-    return listaCanchas;
+        return listaCanchas;
     }
 
     public void bloquearCanchaPorMantenimiento(Cancha canchaBloquear){
