@@ -346,5 +346,4 @@ public Vector<Cancha> busquedaAvanzada(Double minPrecio, Double maxPrecio,
         }
     }
 
-
 }

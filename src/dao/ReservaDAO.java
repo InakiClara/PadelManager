@@ -269,50 +269,63 @@ public class ReservaDAO {
         return reservas;
     }
 
-    public void totalReservas() {
-        String consulta = "SELECT COUNT(*) AS total FROM Reserva";
-
-        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
-             ResultSet rs = ps.executeQuery()) {
-
-            if (rs.next()) {
-                int totalReservas = rs.getInt("total");
-                System.out.println("Total de reservas: " + totalReservas);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener el total de reservas", e);
-        }
-    }
-
-    public void totalIngresos(java.sql.Date fechaInicio, java.sql.Date fechaFin) {
-        String consulta = " SELECT COALESCE(SUM(c.precio), 0) AS total FROM Reserva r JOIN Cancha c ON r.idCancha = c.id WHERE r.fecha BETWEEN ? AND ?";
-
-
-        try (PreparedStatement ps = DatabaseConnection.getInstancia()
-                .getConnection().prepareStatement(consulta)) {
-
-            ps.setDate(1, fechaInicio);  // ESto indica desde que fecha
-            ps.setDate(2, fechaFin);     // Y esto hasta que fecha, sirve para filtrar por dia/mes/año, así depende como lo usemos ¡VER EN EL MOMENTO!
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    double totalIngresos = rs.getDouble("total");
-                    System.out.println("Total de ingresos: " + totalIngresos);
-                }
-            }
-
-        }  catch (SQLException e) {
-        System.err.println("SQLException: " + e.getMessage());
-        throw new RuntimeException("Error al obtener el total de ingresos", e);
-    }
-
-}
-
     private boolean validarContrasenia(String contrasenia) {
         return contrasenia.length() >= 8 && contrasenia.matches(".*[A-Z].*");
     }
 
+    public boolean obtenerEstadoPago(int id) {
+        String consulta = "SELECT estaPagada FROM Reserva WHERE id = ?";
+
+        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    boolean pagada = rs.getBoolean("estaPagada");
+
+                    if (pagada) {
+                        System.out.println("La reserva ha sido pagada");
+                    } else {
+                        System.out.println("La reserva aún no ha sido pagada");
+                    }
+
+                    return pagada;
+                } else {
+                    System.out.println("No se encontró la reserva con el ID proporcionado");
+                    return false;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al consultar el estado de pago", e);
+        }
+    }
+
+    public void pagarReserva(int id) {
+        if (obtenerEstadoPago(id)) { // Consultaremos si la reserva está paga, en caso que esté, no hará nada.
+            return;
+        }
+
+        String consulta = "UPDATE Reserva SET estaPagada = TRUE WHERE id = ?";
+
+        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
+
+            ps.setInt(1, id);
+            int filas = ps.executeUpdate();
+
+            if (filas > 0) {
+                System.out.println("La reserva ha sido pagada exitosamente.");
+            } else {
+                System.out.println("No se encontró la reserva para pagar.");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al pagar la reserva", e);
+        }
+    }
 
 
 }
+
+
