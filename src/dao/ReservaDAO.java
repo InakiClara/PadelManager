@@ -286,10 +286,9 @@ public class ReservaDAO {
     }
 
     public void totalIngresos(java.sql.Date fechaInicio, java.sql.Date fechaFin) {
-        String consulta = "SELECT COALESCE(SUM(monto),0) AS total FROM Reserva WHERE fecha BETWEEN ? AND ?";
+        String consultaIngresos = "SELECT COALESCE(SUM(monto),0) AS total FROM Reserva WHERE fecha BETWEEN ? AND ?";
 
-        try (PreparedStatement ps = DatabaseConnection.getInstancia()
-                .getConnection().prepareStatement(consulta)) {
+        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consultaIngresos)) {
 
             ps.setDate(1, fechaInicio);  // ESto indica desde que fecha
             ps.setDate(2, fechaFin);     // Y esto hasta que fecha, sirve para filtrar por dia/mes/año, así depende como lo usemos ¡VER EN EL MOMENTO!
@@ -310,6 +309,59 @@ public class ReservaDAO {
         return contrasenia.length() >= 8 && contrasenia.matches(".*[A-Z].*");
     }
 
+    public boolean obtenerEstadoPago(int id) {
+        String consulta = "SELECT estaPagada FROM Reserva WHERE id = ?";
+
+        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    boolean pagada = rs.getBoolean("estaPagada");
+
+                    if (pagada) {
+                        System.out.println("La reserva ha sido pagada");
+                    } else {
+                        System.out.println("La reserva aún no ha sido pagada");
+                    }
+
+                    return pagada;
+                } else {
+                    System.out.println("No se encontró la reserva con el ID proporcionado");
+                    return false;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al consultar el estado de pago", e);
+        }
+    }
+
+    public void pagarReserva(int id) {
+        if (obtenerEstadoPago(id)) { // Consultaremos si la reserva está paga, en caso que esté, no hará nada.
+            return;
+        }
+
+        String consulta = "UPDATE Reserva SET estaPagada = TRUE WHERE id = ?";
+
+        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
+
+            ps.setInt(1, id);
+            int filas = ps.executeUpdate();
+
+            if (filas > 0) {
+                System.out.println("La reserva ha sido pagada exitosamente.");
+            } else {
+                System.out.println("No se encontró la reserva para pagar.");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al pagar la reserva", e);
+        }
+    }
 
 
 }
+
+
