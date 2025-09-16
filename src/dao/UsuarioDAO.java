@@ -82,7 +82,7 @@ public class UsuarioDAO {
 
     public Vector<Usuario> listarUsuarios(String criterio) {
         Vector<Usuario> usuarios = new Vector<>();
-        String consulta = "SELECT cedula, nombre, apellido, telefono, correo FROM Usuario WHERE cedula LIKE ? OR nombre LIKE ? OR apellido LIKE ?";
+        String consulta = "SELECT cedula, nombre, apellido, telefono, correo, fechaIngreso FROM Usuario WHERE cedula LIKE ? OR nombre LIKE ? OR apellido LIKE ?";
 
         try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
 
@@ -99,6 +99,35 @@ public class UsuarioDAO {
                     usuario.setApellido(rs.getString("apellido"));
                     usuario.setTelefono(rs.getString("telefono"));
                     usuario.setCorreo(rs.getString("correo"));
+                    usuario.setFechaIngreso(rs.getDate("fechaIngreso"));
+
+
+                    usuarios.add(usuario);
+                }
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al listar usuarios", e);
+        }
+
+        return usuarios;
+    }
+
+    public Vector<Usuario> listarTodosLosUsuarios() {
+        Vector<Usuario> usuarios = new Vector<>();
+        String consulta = "SELECT cedula, nombre, apellido, telefono, correo, fechaIngreso FROM Usuario";
+
+        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setCedula(rs.getString("cedula"));
+                    usuario.setNombre(rs.getString("nombre"));
+                    usuario.setApellido(rs.getString("apellido"));
+                    usuario.setTelefono(rs.getString("telefono"));
+                    usuario.setCorreo(rs.getString("correo"));
+                    usuario.setFechaIngreso(rs.getDate("fechaIngreso"));
 
                     usuarios.add(usuario);
                 }

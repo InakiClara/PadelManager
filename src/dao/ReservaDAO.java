@@ -286,7 +286,8 @@ public class ReservaDAO {
     }
 
     public void totalIngresos(java.sql.Date fechaInicio, java.sql.Date fechaFin) {
-        String consulta = "SELECT COALESCE(SUM(monto),0) AS total FROM Reserva WHERE fecha BETWEEN ? AND ?";
+        String consulta = " SELECT COALESCE(SUM(c.precio), 0) AS total FROM Reserva r JOIN Cancha c ON r.idCancha = c.id WHERE r.fecha BETWEEN ? AND ?";
+
 
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConnection().prepareStatement(consulta)) {
@@ -301,10 +302,12 @@ public class ReservaDAO {
                 }
             }
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener el total de ingresos", e);
-        }
+        }  catch (SQLException e) {
+        System.err.println("SQLException: " + e.getMessage());
+        throw new RuntimeException("Error al obtener el total de ingresos", e);
     }
+
+}
 
     private boolean validarContrasenia(String contrasenia) {
         return contrasenia.length() >= 8 && contrasenia.matches(".*[A-Z].*");
