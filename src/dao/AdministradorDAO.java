@@ -125,6 +125,4 @@ public class AdministradorDAO {
     private boolean validarContrasenia(String contrasenia) {
         return contrasenia.length() >= 8 && contrasenia.matches(".*[A-Z].*");
     }
-
-
 }

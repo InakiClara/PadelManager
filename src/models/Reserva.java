@@ -133,11 +133,12 @@ public class Reserva {
                 ", Fecha: " + fecha +
                 ", Horario Inicio: " + horarioInicio +
                 ", Horario Final: " + horarioFinal +
-                ", Hora Cancelación: " + horaCancelacion +
+                ", Hora Cancelación: " + (horaCancelacion != null ? horaCancelacion : "No cancelada") +
                 ", Método de Pago: " + metodoPago +
                 ", Pagada: " + (estaPagada ? "Sí" : "No") +
                 ", Activa: " + (estaActiva ? "Sí" : "No");
     }
+
 
 }
 
