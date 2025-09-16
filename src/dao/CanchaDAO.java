@@ -118,47 +118,58 @@ public class CanchaDAO {
             }
         }
     }
-    public Vector<Cancha> listarCancha(){
+    public Vector<Cancha> listarCancha() {
         String consultaCanchas = "SELECT * FROM Cancha;";
         String consultaHorarios = "SELECT horario FROM CanchaHorario WHERE idCancha = ?";
-        try (Connection conn = DatabaseConnection.getInstancia().getConnection();
-             PreparedStatement psCanchas = conn.prepareStatement(consultaCanchas);
-             ResultSet rsCanchas = psCanchas.executeQuery()){
 
-            Vector<Cancha> listaCanchas = new Vector<>();
-            System.out.println("Lista de canchas disponibles: ");
-            while(rsCanchas.next()){
+        Vector<Cancha> listaCanchas = new Vector<>();
+
+        try {
+            Connection conn = DatabaseConnection.getInstancia().getConnection();
+            PreparedStatement psCanchas = conn.prepareStatement(consultaCanchas);
+            ResultSet rsCanchas = psCanchas.executeQuery();
+
+            while (rsCanchas.next()) {
                 int id = rsCanchas.getInt("id");
                 double precio = rsCanchas.getDouble("precio");
                 boolean esTechada = rsCanchas.getBoolean("esTechada");
                 boolean estaDisponible = rsCanchas.getBoolean("estaDisponible");
+
                 PreparedStatement psHorarios = conn.prepareStatement(consultaHorarios);
                 psHorarios.setInt(1, id);
                 ResultSet rsHorarios = psHorarios.executeQuery();
 
                 Vector<Time> horarios = new Vector<>();
-                while(rsHorarios.next()){
+                while (rsHorarios.next()) {
                     horarios.add(rsHorarios.getTime("horario"));
                 }
+
+                rsHorarios.close();
+                psHorarios.close();
 
                 CanchaHorario canchaHorario = new CanchaHorario(id, horarios);
                 Cancha cancha = new Cancha(id, esTechada, precio, estaDisponible, canchaHorario);
                 listaCanchas.add(cancha);
-                System.out.printf("-ID: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
-                        id, precio, esTechada ? "Si" : "No", estaDisponible ? "Si" : "No");
 
+                System.out.printf("-ID: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
+                        id, precio, esTechada ? "Sí" : "No", estaDisponible ? "Sí" : "No");
                 System.out.println("  Horarios:");
-                for(Time h : horarios){
-                    System.out.println("hora: " + h.toString());
+                for (Time h : horarios) {
+                    System.out.println("    " + h.toString());
                 }
-                rsHorarios.close();
-                psHorarios.close();
             }
+
+            rsCanchas.close();
+            psCanchas.close();
+
         } catch (Exception e) {
             throw new RuntimeException("Error al listar canchas: " + e.getMessage(), e);
         }
-        return null;
+
+        return listaCanchas;
     }
+
+
     public void desactivarCancha(Cancha canchaDesactivar){
         String consultaReservas = "SELECT COUNT(*) FROM Reserva WHERE idCancha = ? AND estaActiva = TRUE";
         String eliminarHorarios = "DELETE FROM CanchaHorario WHERE idCancha = ?";
@@ -277,33 +288,62 @@ public Vector<Cancha> busquedaAvanzada(Double minPrecio, Double maxPrecio,
     }
 
     return listaCanchas;
-}
-public void bloquearCanchaPorMantenimiento(Cancha canchaBloquear){
-    String consulta = "UPDATE Cancha SET estaDisponible = ? WHERE id = ?";
-    Connection conn = null;
-    PreparedStatement ps = null;
-    try {
-        conn = DatabaseConnection.getInstancia().getConnection();
-        ps = conn.prepareStatement(consulta);
-        ps.setBoolean(1, false);
-        ps.setInt(2, canchaBloquear.getId());
-        int filasAfectadas = ps.executeUpdate();
-        if (filasAfectadas > 0) {
-            System.out.println("Cancha bloqueada por mantenimiento (ID: " + canchaBloquear.getId() + ")");
-        }else{
-            System.out.println("No se encontró ninguna cancha con ese ID.");
-        }
-    }catch (SQLException e){
-        throw new RuntimeException("Error al bloquear la cancha: " + e.getMessage(), e);
-    }finally {
+    }
+
+    public void bloquearCanchaPorMantenimiento(Cancha canchaBloquear){
+        String consulta = "UPDATE Cancha SET estaDisponible = ? WHERE id = ?";
+        PreparedStatement ps = null;
+
         try {
-            if (ps != null) ps.close();
-            if(conn != null) conn.close();
-        }catch (SQLException e) {
-            System.err.println("Error al cerrar recursos: " + e.getMessage());
+            Connection conn = DatabaseConnection.getInstancia().getConnection();
+            ps = conn.prepareStatement(consulta);
+            ps.setBoolean(1, false);
+            ps.setInt(2, canchaBloquear.getId());
+
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                System.out.println("Cancha bloqueada por mantenimiento (ID: " + canchaBloquear.getId() + ")");
+            } else {
+                System.out.println("No se encontró ninguna cancha con ese ID.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al bloquear la cancha: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (ps != null) ps.close();
+
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar recursos: " + e.getMessage());
+            }
         }
     }
 
-}
+    public void desbloquearCancha(Cancha canchaDesbloquear){
+        String consulta = "UPDATE Cancha SET estaDisponible = ? WHERE id = ?";
+        PreparedStatement ps = null;
+
+        try {
+            Connection conn = DatabaseConnection.getInstancia().getConnection();
+            ps = conn.prepareStatement(consulta);
+            ps.setBoolean(1, true);
+            ps.setInt(2, canchaDesbloquear.getId());
+
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                System.out.println("Cancha desbloqueada (ID: " + canchaDesbloquear.getId() + ")");
+            } else {
+                System.out.println("No se encontró ninguna cancha con ese ID.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al desbloquear la cancha: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (ps != null) ps.close();
+
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
+    }
 
 }

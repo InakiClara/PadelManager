@@ -269,42 +269,6 @@ public class ReservaDAO {
         return reservas;
     }
 
-    public void totalReservas() {
-        String consulta = "SELECT COUNT(*) AS total FROM Reserva";
-
-        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
-             ResultSet rs = ps.executeQuery()) {
-
-            if (rs.next()) {
-                int totalReservas = rs.getInt("total");
-                System.out.println("Total de reservas: " + totalReservas);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener el total de reservas", e);
-        }
-    }
-
-    public void totalIngresos(java.sql.Date fechaInicio, java.sql.Date fechaFin) {
-        String consultaIngresos = "SELECT COALESCE(SUM(monto),0) AS total FROM Reserva WHERE fecha BETWEEN ? AND ?";
-
-        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consultaIngresos)) {
-
-            ps.setDate(1, fechaInicio);  // ESto indica desde que fecha
-            ps.setDate(2, fechaFin);     // Y esto hasta que fecha, sirve para filtrar por dia/mes/año, así depende como lo usemos ¡VER EN EL MOMENTO!
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    double totalIngresos = rs.getDouble("total");
-                    System.out.println("Total de ingresos: " + totalIngresos);
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener el total de ingresos", e);
-        }
-    }
-
     private boolean validarContrasenia(String contrasenia) {
         return contrasenia.length() >= 8 && contrasenia.matches(".*[A-Z].*");
     }
