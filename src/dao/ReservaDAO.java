@@ -269,10 +269,6 @@ public class ReservaDAO {
         return reservas;
     }
 
-    private boolean validarContrasenia(String contrasenia) {
-        return contrasenia.length() >= 8 && contrasenia.matches(".*[A-Z].*");
-    }
-
     public boolean obtenerEstadoPago(int id) {
         String consulta = "SELECT estaPagada FROM Reserva WHERE id = ?";
 
@@ -323,6 +319,46 @@ public class ReservaDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Error al pagar la reserva", e);
         }
+    }
+
+    public void totalReservas() {
+        String consulta = "SELECT COUNT(*) AS total FROM Reserva";
+
+        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                int totalReservas = rs.getInt("total");
+                System.out.println("Total de reservas: " + totalReservas);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener el total de reservas", e);
+        }
+    }
+
+    public void totalIngresos(java.sql.Date fechaInicio, java.sql.Date fechaFin) {
+        String consulta = " SELECT COALESCE(SUM(c.precio), 0) AS total FROM Reserva r JOIN Cancha c ON r.idCancha = c.id WHERE r.fecha BETWEEN ? AND ?";
+
+
+        try (PreparedStatement ps = DatabaseConnection.getInstancia()
+                .getConnection().prepareStatement(consulta)) {
+
+            ps.setDate(1, fechaInicio);  // ESto indica desde que fecha
+            ps.setDate(2, fechaFin);     // Y esto hasta que fecha, sirve para filtrar por dia/mes/año, así depende como lo usemos ¡VER EN EL MOMENTO!
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    double totalIngresos = rs.getDouble("total");
+                    System.out.println("Total de ingresos: " + totalIngresos);
+                }
+            }
+
+        }  catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new RuntimeException("Error al obtener el total de ingresos", e);
+        }
+
     }
 
 }
