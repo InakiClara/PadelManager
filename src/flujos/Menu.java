@@ -73,27 +73,29 @@ public class Menu {
                 System.out.println("21. Eliminar Cancha");
                 System.out.println("22. Actualizar Cancha");
                 System.out.println("23. Bloquear Cancha por mantenimiento");
+                System.out.println("24. Desbloquear Cancha");
+                System.out.println("25. Busqueda avanzada de Cancha");
 
 
                 // ---------- Jugador ----------
                 System.out.println("-----------Jugador---------");
-                System.out.println("24. Crear Jugador");
-                System.out.println("25. Modificar Jugador");
-                System.out.println("26. Eliminar Jugador");
-                System.out.println("27. Listar Jugadores");
-                System.out.println("28. Analizar baneos de jugadores");
-                System.out.println("29. Listar baenados");
-                System.out.println("30. Desbanear jugadores");
+                System.out.println("26. Crear Jugador");
+                System.out.println("27. Modificar Jugador");
+                System.out.println("28. Eliminar Jugador");
+                System.out.println("29. Listar Jugadores");
+                System.out.println("30. Analizar baneos de jugadores");
+                System.out.println("31. Listar baenados");
+                System.out.println("32. Desbanear jugadores");
 
 
                 // ---------- Estadísticas ----------
                 System.out.println("--------Estadísticas--------");
-                System.out.println("31. Total de reservas");
-                System.out.println("32. Total de ingresos");
+                System.out.println("33. Total de reservas");
+                System.out.println("34. Total de ingresos");
 
 
                 // ---------- Salir ----------
-                System.out.println("33. Salir");
+                System.out.println("0. Salir");
                 System.out.println("============================");
                 System.out.println("Ingrese el numero de la opcion que desea");
                 System.out.print("Opción: ");
@@ -102,6 +104,9 @@ public class Menu {
                 scanner.nextLine();
 
                 switch (opcion) {
+                    // Salir
+                    case 0: System.out.println("Saliendo..."); break;
+
                     // Reservas
                     case 1: crearReserva(); break;
                     case 2: cancelarReserva(); break;
@@ -120,7 +125,6 @@ public class Menu {
                     case 13: listarAdministradores(); break;
 
                     // Usuarios
-
                     case 14: iniciarSesion(); break;
                     case 15: cambiarContrasenia(); break;
                     case 16: listarUsuarios(); break;
@@ -134,23 +138,20 @@ public class Menu {
                     case 22: actualizarCancha(); break;
                     case 23: bloquearCanchaMantenimiento();break;
                     case 24: desbloquearCancha();break;
+                    case 25: busquedaAvanzadaMenu();break;
 
                     // Jugador
-                    case 25: crearJugador(); break;
-                    case 26: modificarJugador(); break;
-                    case 27: eliminarJugador(); break;
-                    case 28: listarJugadores(); break;
-                    case 29: jugadorDAO.analizarBaneos(); break;
-                    case 30: listarJugadoresBaneados(); break;
-                    case 31: desbanearJugador(); break;
-
+                    case 26: crearJugador(); break;
+                    case 27: modificarJugador(); break;
+                    case 28: eliminarJugador(); break;
+                    case 29: listarJugadores(); break;
+                    case 30: jugadorDAO.analizarBaneos(); break;
+                    case 31: listarJugadoresBaneados(); break;
+                    case 32: desbanearJugador(); break;
 
                     // Estadísticas
-                    case 32: reservaDAO.totalReservas(); break;
-                    case 33: mostrarTotalIngresos(); break;
-
-                    // Salir
-                    case 34: System.out.println("Saliendo..."); break;
+                    case 33: reservaDAO.totalReservas(); break;
+                    case 34: mostrarTotalIngresos(); break;
 
                     default: System.out.println("Opción incorrecta"); break;
                 }
@@ -159,7 +160,7 @@ public class Menu {
                 System.out.println("Error: " + e.getMessage());
                 scanner.nextLine();
             }
-        } while (opcion != 33);
+        } while (opcion != 0);
     }
 
 
@@ -653,8 +654,7 @@ public class Menu {
             System.out.print("Genero: ");
             String genero = scanner.nextLine();
 
-            System.out.print("¿Incumple pago?: ");
-            boolean incumplePago = Boolean.parseBoolean(scanner.nextLine());
+            int incumplePago = 0;
 
             System.out.print("¿Está baneado?: ");
             boolean estaBaneado = Boolean.parseBoolean(scanner.nextLine());
@@ -701,7 +701,7 @@ public class Menu {
             String genero = scanner.nextLine();
 
             System.out.print("¿Incumple pago? (true/false): ");
-            boolean incumplePago = Boolean.parseBoolean(scanner.nextLine());
+            int incumplePago = scanner.nextInt();
 
             System.out.print("¿Está baneado? (true/false): ");
             boolean estaBaneado = Boolean.parseBoolean(scanner.nextLine());
@@ -851,6 +851,47 @@ public class Menu {
             canchaDAO.desbloquearCancha(canchaSeleccionada);
         } else {
             System.out.println("Operación cancelada.");
+        }
+    }
+    private void busquedaAvanzadaMenu() {
+        try {
+            System.out.println("===== BÚSQUEDA AVANZADA DE CANCHAS =====");
+            System.out.print("Ingrese precio mínimo (o Enter para omitir): ");
+            String minPrecioInput = scanner.nextLine();
+            Double minPrecio = minPrecioInput.isEmpty() ? null : Double.parseDouble(minPrecioInput);
+            System.out.print("Ingrese precio máximo (o Enter para omitir): ");
+            String maxPrecioInput = scanner.nextLine();
+            Double maxPrecio = maxPrecioInput.isEmpty() ? null : Double.parseDouble(maxPrecioInput);
+            System.out.print("¿Quiere que sea techada? (s/n o Enter para omitir): ");
+            String techadaInput = scanner.nextLine();
+            Boolean esTechada = techadaInput.isEmpty() ? null : techadaInput.equalsIgnoreCase("s");
+            System.out.print("¿Debe estar disponible? (s/n o Enter para omitir): ");
+            String disponibleInput = scanner.nextLine();
+            Boolean disponible = disponibleInput.isEmpty() ? null : disponibleInput.equalsIgnoreCase("s");
+            System.out.print("Ingrese hora exacta (HH:MM:SS o Enter para omitir): ");
+            String horaInput = scanner.nextLine();
+            Time hora = horaInput.isEmpty() ? null : Time.valueOf(horaInput);
+
+            Date fecha = null;
+            Vector<Cancha> resultados = canchaDAO.busquedaAvanzada(minPrecio, maxPrecio, esTechada, disponible, (java.sql.Date) fecha, hora);
+            if (resultados.isEmpty()) {
+                System.out.println("No se encontraron canchas con los criterios ingresados.");
+            } else {
+                System.out.println("===== RESULTADOS =====");
+                for (Cancha c : resultados) {
+                    System.out.println("ID: " + c.getId() +
+                            " | Precio: " + c.getPrecio() +
+                            " | Techada: " + c.isEsTechada() +
+                            " | Disponible: " + c.isEstaDispoonible());
+                    System.out.print("  Horarios: ");
+                    for (Time h : c.getHorario().getHorarios()) {
+                        System.out.print(h + " ");
+                    }
+                    System.out.println();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error en búsqueda avanzada: " + e.getMessage());
         }
     }
 }
