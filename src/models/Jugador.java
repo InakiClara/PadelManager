@@ -1,16 +1,14 @@
 package models;
 import java.util.Date;
 
-import java.time.LocalDate;
-
 public class Jugador extends Usuario {
     private Date fechaNacimiento;
     private String categoria;
     private String genero;
-    private boolean incumplePago;
+    private int incumplePago;
     private boolean estaBaneado;
 
-    public Jugador(String cedula, String nombre, String apellido, String correo, String telefono, String contraseniaCuenta, Date fechaNacimiento, String categoria, String genero, boolean incumplePago, boolean estaBaneado) {
+    public Jugador(String cedula, String nombre, String apellido, String correo, String telefono, String contraseniaCuenta, Date fechaNacimiento, String categoria, String genero, int incumplePago, boolean estaBaneado) {
         super(cedula, nombre, apellido, correo, telefono, contraseniaCuenta);
         this.fechaNacimiento = fechaNacimiento;
         this.categoria = categoria;
@@ -43,11 +41,11 @@ public class Jugador extends Usuario {
         this.genero = genero;
     }
 
-    public boolean isIncumplePago() {
+    public int isIncumplePago() {
         return incumplePago;
     }
 
-    public void setIncumplePago(boolean incumplePago) {
+    public void setIncumplePago(int incumplePago) {
         this.incumplePago = incumplePago;
     }
 
