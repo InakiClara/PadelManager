@@ -183,5 +183,21 @@ public class UsuarioDAO {
         return cantidad;
     }
 
+    public boolean existeUsuario(String cedula) {
+        String consulta = "SELECT * FROM Usuario WHERE cedula = ?";
+        try  {
+            PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
+            ps.setString(1, cedula);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error ", e);
+        }
+    }
+
+
+
+
 
 }

@@ -223,6 +223,17 @@ public class JugadorDAO {
         }
     }
 
-
+    public boolean jugadorBaneado(String cedula) {
+        String consulta = "SELECT estaBaneado FROM Jugador WHERE cedula = ?";
+        try {
+            PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
+            ps.setString(1, cedula);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() && rs.getBoolean("estaBaneado");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al verificar estado del jugador", e);
+        }
+    }
 }
 

@@ -321,7 +321,11 @@ public class Menu {
 
         System.out.print("Cédula: ");
         String cedula = scanner.nextLine();
-
+        if(usuarioDAO.existeUsuario(cedula))
+        {
+            System.out.println("Ya hay un usuario con esa cedula");
+            return;
+        }
         System.out.print("Nombre: ");
         String nombre = scanner.nextLine();
 
@@ -374,12 +378,20 @@ public class Menu {
             System.out.print("Cédula del jugador: ");
             String cedulaUsuario = scanner.nextLine();
 
+            if(jugadorDAO.jugadorBaneado(cedulaUsuario)){
+                System.out.println("El usuario esta baneado");
+                return;
+            }
             canchaDAO.listarCancha();
 
             System.out.print("Número de la cancha: ");
             int numeroCancha = scanner.nextInt();
             scanner.nextLine(); // Limpiar buffer
 
+            if(!canchaDAO.canchaDisponible(numeroCancha)){
+                System.out.println("La cancha no esta desponible");
+                return;
+            }
             System.out.print("Fecha (dd/MM/yyyy): ");
             String fechaStr = scanner.nextLine();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -402,7 +414,7 @@ public class Menu {
                 }
             }
 
-            // Usamos el número de cancha, el DAO se encarga de obtener el id
+
             Reserva reserva = new Reserva(cedulaUsuario, numeroCancha, fecha, horarioInicio, horarioFin, null, metodoPago, false, true);
             reservaDAO.crearReserva(reserva);
             System.out.println("Reserva creada correctamente: " + reserva);
@@ -426,7 +438,10 @@ public class Menu {
 
             System.out.print("Cédula del jugador: ");
             String cedulaUsuario = scanner.nextLine();
-
+            if(jugadorDAO.jugadorBaneado(cedulaUsuario)){
+                System.out.println("El usuario esta baneado");
+                return;
+            }
             canchaDAO.listarCancha();
 
             System.out.print("Nueva fecha (dd/MM/yyyy): ");
@@ -444,7 +459,10 @@ public class Menu {
             System.out.print("Ingrese nuevo número de la cancha: ");
             int numeroCancha = scanner.nextInt();
             scanner.nextLine();
-
+            if(!canchaDAO.canchaDisponible(numeroCancha)){
+                System.out.println("La cancha no esta desponible");
+                return;
+            }
             MetodoPago metodoPago = null;
             while (metodoPago == null) {
                 System.out.print("Nuevo método de pago (efectivo, tarjeta, transferencia, mercado_pago): ");
@@ -456,7 +474,7 @@ public class Menu {
                 }
             }
 
-            // El DAO se encargará de convertir numeroCancha a id
+
             Reserva reserva = new Reserva(cedulaUsuario, numeroCancha, fecha, horarioInicio, horarioFin, null, metodoPago, false, true);
             reserva.setId(id);
             reservaDAO.actualizarReserva(reserva);
@@ -605,7 +623,10 @@ public class Menu {
 
         int numero = scanner.nextInt();
         scanner.nextLine();
-
+        if(canchaDAO.existeNumeroCancha(numero)){
+            System.out.println("El numero de cancha ya existe");
+            return;
+        }
         System.out.print("Precio por hora: ");
         double precio = scanner.nextDouble();
         scanner.nextLine();
@@ -740,7 +761,11 @@ public class Menu {
         try {
             System.out.print("Cedula: ");
             String cedula = scanner.nextLine();
-
+            if(usuarioDAO.existeUsuario(cedula))
+            {
+                System.out.println("Ya hay un usuario con esa cedula");
+                return;
+            }
             System.out.print("Nombre: ");
             String nombre = scanner.nextLine();
 
