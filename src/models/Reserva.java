@@ -9,7 +9,7 @@ public class Reserva {
 
     private int id;
     private String cedulaUsuario;
-    private int idCancha;
+    private int numero;
     private Date fecha;
     private Time horarioInicio;
     private Time horarioFinal;
@@ -20,9 +20,9 @@ public class Reserva {
     Vector <models.Usuario> usuarios;
     Vector <models.Cancha> canchas;
 
-    public Reserva(String cedulaUsuario, int idCancha, Date fecha, Time horarioInicio, Time horarioFinal, Time horaCancelacion, MetodoPago metodoPago, boolean estaPagada, boolean estaActiva){
+    public Reserva(String cedulaUsuario, int numero, Date fecha, Time horarioInicio, Time horarioFinal, Time horaCancelacion, MetodoPago metodoPago, boolean estaPagada, boolean estaActiva){
         this.cedulaUsuario = cedulaUsuario;
-        this.idCancha = idCancha;
+        this.numero=numero;
         this.fecha = fecha;
         this.horarioInicio = horarioInicio;
         this.horarioFinal = horarioFinal;
@@ -47,12 +47,12 @@ public class Reserva {
         this.cedulaUsuario = cedulaUsuario;
     }
 
-    public int getIdCancha() {
-        return idCancha;
+    public int getNumero() {
+        return numero;
     }
 
-    public void setIdCancha(int idCancha) {
-        this.idCancha = idCancha;
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 
     public Date getFecha() {
@@ -129,7 +129,7 @@ public class Reserva {
     public String toString() {
         return "ID Reserva: " + id +
                 ", Cédula Usuario: " + cedulaUsuario +
-                ", ID Cancha: " + idCancha +
+                ", Numero: " + numero +
                 ", Fecha: " + fecha +
                 ", Horario Inicio: " + horarioInicio +
                 ", Horario Final: " + horarioFinal +
