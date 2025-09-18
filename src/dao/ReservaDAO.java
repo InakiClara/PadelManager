@@ -17,7 +17,7 @@ import java.util.Vector;
 
 public class ReservaDAO {
 
-    // --- Crear reserva ---
+    // Crear reserva
     public void crearReserva(Reserva nuevaReserva) {
 
         long inicioMillis = nuevaReserva.getHorarioInicio().getTime();
@@ -74,7 +74,7 @@ public class ReservaDAO {
         }
     }
 
-    // --- Actualizar reserva ---
+    // Actualizar reserva
     public void actualizarReserva(Reserva nuevaReserva) {
 
         long inicioMillis = nuevaReserva.getHorarioInicio().getTime();
@@ -127,7 +127,7 @@ public class ReservaDAO {
         }
     }
 
-    // --- Cancelar reserva ---
+    // Cancelar reserva
     public void cancelarReserva(int id) {
         String consulta = "UPDATE Reserva SET estaActiva = false, horaCancelacion = CURRENT_TIME WHERE id = ?";
 
@@ -144,7 +144,7 @@ public class ReservaDAO {
         }
     }
 
-    // --- Listar reservas por usuario ---
+    // Listar reservas por usuario
     public Vector<Reserva> listarReservasPorUsuario(String cedulaUsuario) {
         Vector<Reserva> reservas = new Vector<>();
         String consulta = "SELECT * FROM Reserva WHERE cedulaUsuario = ? AND estaActiva = true";
@@ -163,7 +163,7 @@ public class ReservaDAO {
         return reservas;
     }
 
-    // --- Listar reservas por número de cancha ---
+    //Listar reservas por número de cancha
     public Vector<Reserva> listarReservasPorCancha(int numeroCancha) {
         Vector<Reserva> reservas = new Vector<>();
         String consulta = "SELECT r.* FROM Reserva r JOIN Cancha c ON r.idCancha = c.id " +
@@ -183,7 +183,7 @@ public class ReservaDAO {
         return reservas;
     }
 
-    // --- Listar reservas por fecha ---
+    // Listar reservas por fecha
     public Vector<Reserva> listarReservasPorFecha(Date fecha) {
         Vector<Reserva> reservas = new Vector<>();
         String consulta = "SELECT * FROM Reserva WHERE fecha = ? AND estaActiva = true";
@@ -202,7 +202,7 @@ public class ReservaDAO {
         return reservas;
     }
 
-    // --- Listar reservas por fecha y jugador ---
+    // Listar reservas por fecha y jugador
     public Vector<Reserva> listarReservasPorFechaJugador(Date fecha, String cedulaUsuario) {
         Vector<Reserva> reservas = new Vector<>();
         String consulta = "SELECT r.* FROM Reserva r JOIN Usuario u ON r.cedulaUsuario = u.cedula " +
@@ -224,7 +224,25 @@ public class ReservaDAO {
         return reservas;
     }
 
-    // --- Estado de pago ---
+    // Listar todas las reservas
+    public Vector<Reserva> listarTodasLasReservas() {
+        Vector<Reserva> reservas = new Vector<>();
+        String consulta = "SELECT * FROM Reserva";
+
+        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    reservas.add(mapearReservaDesdeResultSet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return reservas;
+    }
+
+    // Estado de pago
     public boolean obtenerEstadoPago(int id) {
         String consulta = "SELECT estaPagada FROM Reserva WHERE id = ?";
 
@@ -245,7 +263,7 @@ public class ReservaDAO {
         }
     }
 
-    // --- Pagar reserva ---
+    // Pagar reserva
     public void pagarReserva(int id) {
         if (obtenerEstadoPago(id)) return;
 
@@ -260,7 +278,7 @@ public class ReservaDAO {
         }
     }
 
-    // --- Total reservas ---
+    //Total reservas
     public void totalReservas() {
         String consulta = "SELECT COUNT(*) AS total FROM Reserva";
 
@@ -276,7 +294,7 @@ public class ReservaDAO {
         }
     }
 
-    // --- Total ingresos ---
+    //Total ingresos
     public void totalIngresos(java.sql.Date fechaInicio, java.sql.Date fechaFin) {
         String consulta = "SELECT COALESCE(SUM(c.precio), 0) AS total FROM Reserva r JOIN Cancha c ON r.idCancha = c.id " +
                 "WHERE r.fecha BETWEEN ? AND ?";
@@ -296,7 +314,7 @@ public class ReservaDAO {
         }
     }
 
-    // --- Método auxiliar ---
+
     private Reserva mapearReservaDesdeResultSet(ResultSet rs) throws SQLException {
         String cedula = rs.getString("cedulaUsuario");
         int idCancha = rs.getInt("idCancha");
