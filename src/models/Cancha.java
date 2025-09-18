@@ -1,6 +1,7 @@
 package models;
 
 public class Cancha {
+
     private int id;              // autoincremental, clave primaria
     private boolean esTechada;
     private double precio;
@@ -15,6 +16,7 @@ public class Cancha {
         this.estaDisponible = estaDisponible;
         this.numero = numero;
         this.horario = horario;
+
     }
 
     // Constructor para cargar cancha desde BD (ya tiene id)
@@ -27,6 +29,7 @@ public class Cancha {
         this.horario = horario;
     }
 
+
     // Getters y setters
     public int getId() {
         return id;
@@ -35,6 +38,7 @@ public class Cancha {
     public void setId(int id) {
         this.id = id;
     }
+
 
     public boolean isEsTechada() {
         return esTechada;

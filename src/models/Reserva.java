@@ -8,8 +8,10 @@ public class Reserva {
 
     private int id;              // autoincremental, generado por BD
     private String cedulaUsuario;
+
     private int idCancha;        // referencia interna a la cancha
     private int numeroCancha;    // número de la cancha (clave principal lógica)
+
     private Date fecha;
     private Time horarioInicio;
     private Time horarioFinal;
@@ -20,12 +22,14 @@ public class Reserva {
     private Vector<Usuario> usuarios;
     private Vector<Cancha> canchas;
 
+
     // Constructor para crear nueva reserva (id se genera en BD)
     public Reserva(String cedulaUsuario, int numeroCancha, Date fecha, Time horarioInicio,
                    Time horarioFinal, Time horaCancelacion, MetodoPago metodoPago,
                    boolean estaPagada, boolean estaActiva) {
         this.cedulaUsuario = cedulaUsuario;
         this.numeroCancha = numeroCancha;
+
         this.fecha = fecha;
         this.horarioInicio = horarioInicio;
         this.horarioFinal = horarioFinal;
@@ -43,8 +47,10 @@ public class Reserva {
                    boolean estaPagada, boolean estaActiva) {
         this.id = id;
         this.cedulaUsuario = cedulaUsuario;
+
         this.idCancha = idCancha;
         this.numeroCancha = numeroCancha;
+
         this.fecha = fecha;
         this.horarioInicio = horarioInicio;
         this.horarioFinal = horarioFinal;
@@ -98,8 +104,10 @@ public class Reserva {
     public String toString() {
         return "ID Reserva: " + id +
                 ", Cédula Usuario: " + cedulaUsuario +
+
                 ", Nº Cancha: " + numeroCancha +
                 ", ID Cancha: " + idCancha +
+
                 ", Fecha: " + fecha +
                 ", Horario Inicio: " + horarioInicio +
                 ", Horario Final: " + horarioFinal +

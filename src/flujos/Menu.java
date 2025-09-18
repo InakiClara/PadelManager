@@ -582,7 +582,9 @@ public class Menu {
     }
 
     private void crearCancha() {
+
         System.out.print("Número de la cancha: ");
+
         int numero = scanner.nextInt();
         scanner.nextLine();
 
@@ -610,17 +612,21 @@ public class Menu {
             horarios.add(horario);
         }
 
+
         CanchaHorario canchaHorario = new CanchaHorario(0, horarios); // id se genera internamente
         Cancha nuevaCancha = new Cancha(0, esTechada, precio, estaDisponible, numero, canchaHorario);
 
+
         canchaDAO.altaCancha(nuevaCancha);
     }
+
 
     private void actualizarCancha() {
         System.out.println("Canchas disponibles:");
         canchaDAO.listarCancha();
 
         System.out.print("Número de la cancha a actualizar: ");
+
         int numero = scanner.nextInt();
         scanner.nextLine();
 
@@ -650,6 +656,7 @@ public class Menu {
 
         CanchaHorario canchaHorario = new CanchaHorario(0, horarios); // id se obtiene en DAO
         Cancha canchaActualizar = new Cancha(0, esTechada, precio, estaDisponible, numero, canchaHorario);
+
 
         canchaDAO.actualizarCancha(canchaActualizar);
     }
@@ -861,14 +868,18 @@ public class Menu {
         System.out.println("Lista de canchas:");
         for (Cancha c : listaCanchas) {
             System.out.printf("Número: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
+
                     c.getNumero(), c.getPrecio(),
+
                     c.isEsTechada() ? "Sí" : "No",
                     c.isEstaDisponible() ? "Sí" : "No");
         }
 
+
         System.out.print("Ingrese el número de la cancha que desea bloquear: ");
         int numeroSeleccionado = scanner.nextInt();
         scanner.nextLine();
+
 
         Cancha canchaSeleccionada = null;
         for (Cancha c : listaCanchas) {
@@ -879,7 +890,9 @@ public class Menu {
         }
 
         if (canchaSeleccionada == null) {
+
             System.out.println("No se encontró una cancha con ese número.");
+
             return;
         }
 
@@ -910,14 +923,18 @@ public class Menu {
         System.out.println("Lista de canchas:");
         for (Cancha c : listaCanchas) {
             System.out.printf("Número: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
+
                     c.getNumero(), c.getPrecio(),
+
                     c.isEsTechada() ? "Sí" : "No",
                     c.isEstaDisponible() ? "Sí" : "No");
         }
 
+
         System.out.print("Ingrese el número de la cancha que desea desbloquear: ");
         int numeroSeleccionado = scanner.nextInt();
         scanner.nextLine();
+
 
         Cancha canchaSeleccionada = null;
         for (Cancha c : listaCanchas) {
@@ -928,7 +945,9 @@ public class Menu {
         }
 
         if (canchaSeleccionada == null) {
+
             System.out.println("No se encontró una cancha con ese número.");
+
             return;
         }
 
@@ -980,8 +999,7 @@ public class Menu {
             } else {
                 System.out.println("===== RESULTADOS =====");
                 for (Cancha c : resultados) {
-                    System.out.println("ID: " + c.getId() +
-                            " | Número: " + c.getNumero() +
+                    System.out.println("Numero: " + c.getNumero() +
                             " | Precio: " + c.getPrecio() +
                             " | Techada: " + (c.isEsTechada() ? "Sí" : "No") +
                             " | Disponible: " + (c.isEstaDisponible() ? "Sí" : "No"));
