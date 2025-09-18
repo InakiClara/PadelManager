@@ -155,7 +155,7 @@ public class Menu {
         } while (opcion != 0);
     }
 
-    private void menuReservas() {
+    private void menuReservas() throws SQLException {
         int opcion;
         do {
             System.out.println("------ Menú Reservas ------");
@@ -374,6 +374,8 @@ public class Menu {
             System.out.print("Cédula del jugador: ");
             String cedulaUsuario = scanner.nextLine();
 
+            canchaDAO.listarCancha();
+
             System.out.print("Número de la cancha: ");
             int numeroCancha = scanner.nextInt();
             scanner.nextLine(); // Limpiar buffer
@@ -388,7 +390,7 @@ public class Menu {
             Time horarioInicio = Time.valueOf(horaInicioStr + ":00");
             Time horarioFin = new Time(horarioInicio.getTime() + 90 * 60 * 1000);
 
-            // Solicitar método de pago
+
             MetodoPago metodoPago = null;
             while (metodoPago == null) {
                 System.out.print("Método de pago (efectivo, tarjeta, transferencia, mercado_pago): ");
@@ -414,6 +416,8 @@ public class Menu {
 
     private void modificarReserva() {
         try {
+
+            listarTodasLasReservas();
             System.out.print("ID de la reserva: ");
             int id = scanner.nextInt();
             scanner.nextLine();
@@ -422,6 +426,8 @@ public class Menu {
 
             System.out.print("Cédula del jugador: ");
             String cedulaUsuario = scanner.nextLine();
+
+            canchaDAO.listarCancha();
 
             System.out.print("Nueva fecha (dd/MM/yyyy): ");
             String fechaStr = scanner.nextLine();
@@ -455,7 +461,7 @@ public class Menu {
             reserva.setId(id);
             reservaDAO.actualizarReserva(reserva);
 
-            System.out.println("Reserva modificada correctamente: " + reserva);
+            //System.out.println("Reserva modificada correctamente: " + reserva);
 
         } catch (ParseException e) {
             System.out.println("Formato de fecha incorrecto. Use dd/MM/yyyy");
@@ -466,11 +472,12 @@ public class Menu {
 
     private void cancelarReserva() {
         try {
+            listarTodasLasReservas();
             System.out.print("ID de la reserva: ");
             int id = scanner.nextInt();
             scanner.nextLine();
             reservaDAO.cancelarReserva(id);
-            System.out.println("Reserva cancelada correctamente.");
+            //System.out.println("Reserva cancelada correctamente.");
         } catch (Exception e) {
             System.out.println("Error al cancelar la reserva: " + e.getMessage());
         }
@@ -489,7 +496,17 @@ public class Menu {
         }
     }
 
-    private void listarReservaPorCancha() {
+    private void listarTodasLasReservas() {
+        Vector<Reserva> reservas = reservaDAO.listarTodasLasReservas();
+        if (reservas.isEmpty()) {
+            System.out.println("No hay reservas.");
+        } else {
+            reservas.forEach(System.out::println);
+        }
+    }
+
+    private void listarReservaPorCancha() throws SQLException {
+        canchaDAO.listarCancha();
         System.out.print("Número de la cancha: ");
         int numero = scanner.nextInt();
         scanner.nextLine();
@@ -582,8 +599,8 @@ public class Menu {
         }
     }
 
-    private void crearCancha() {
-
+    private void crearCancha() throws SQLException {
+        canchaDAO.listarCancha();
         System.out.print("Número de la cancha: ");
 
         int numero = scanner.nextInt();
@@ -662,7 +679,8 @@ public class Menu {
         canchaDAO.actualizarCancha(canchaActualizar);
     }
 
-    private void desactivarCancha() {
+    private void desactivarCancha() throws SQLException {
+        canchaDAO.listarCancha();
         System.out.print("Número de la cancha a desactivar: ");
         int numero = scanner.nextInt();
         scanner.nextLine();
