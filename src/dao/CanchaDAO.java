@@ -8,7 +8,6 @@ import java.util.Vector;
 
 public class CanchaDAO {
     public void altaCancha(Cancha nuevaCancha) {
-
         String consultaCancha = "INSERT INTO Cancha (numero, precio, esTechada, estaDisponible) VALUES (?, ?, ?, ?)";
         String consultaHorario = "INSERT INTO CanchaHorario (idCancha, horario) VALUES (?, ?)";
         Connection conn = null;
@@ -20,10 +19,8 @@ public class CanchaDAO {
             conn = DatabaseConnection.getInstancia().getConnection();
             conn.setAutoCommit(false);
 
-
             // Insertar cancha sin id (autoincremental)
             psCancha = conn.prepareStatement(consultaCancha, Statement.RETURN_GENERATED_KEYS);
-
             psCancha.setInt(1, nuevaCancha.getNumero());
             psCancha.setDouble(2, nuevaCancha.getPrecio());
             psCancha.setBoolean(3, nuevaCancha.isEsTechada());
@@ -72,18 +69,15 @@ public class CanchaDAO {
 
     // ACTUALIZAR CANCHA
     public void actualizarCancha(Cancha canchaActualizada) {
-
         String consultaId = "SELECT id FROM Cancha WHERE numero = ?";
         String consultaCancha = "UPDATE Cancha SET precio = ?, esTechada = ?, estaDisponible = ? WHERE id = ?";
         String eliminarHorarios = "DELETE FROM CanchaHorario WHERE idCancha = ?";
         String insertarHorario = "INSERT INTO CanchaHorario (idCancha, horario) VALUES (?, ?)";
-
         Connection conn = null;
 
         try {
             conn = DatabaseConnection.getInstancia().getConnection();
             conn.setAutoCommit(false);
-
 
             // Obtener id de la cancha a partir del numero
             PreparedStatement psId = conn.prepareStatement(consultaId);
@@ -104,21 +98,19 @@ public class CanchaDAO {
             psCancha.setBoolean(2, canchaActualizada.isEsTechada());
             psCancha.setBoolean(3, canchaActualizada.isEstaDisponible());
             psCancha.setInt(4, canchaActualizada.getId());
-
             psCancha.executeUpdate();
             psCancha.close();
 
             // Actualizar horarios
             PreparedStatement psEliminarHorarios = conn.prepareStatement(eliminarHorarios);
             psEliminarHorarios.setInt(1, canchaActualizada.getId());
-
             psEliminarHorarios.executeUpdate();
             psEliminarHorarios.close();
 
             PreparedStatement psInsertarHorario = conn.prepareStatement(insertarHorario);
             Vector<Time> listaHorarios = canchaActualizada.getHorario().getHorarios();
             for (Time horario : listaHorarios) {
-                psInsertarHorario.setInt(1, canchaActualizada.getNumero());
+                psInsertarHorario.setInt(1, canchaActualizada.getId());
                 psInsertarHorario.setTime(2, horario);
                 psInsertarHorario.addBatch();
             }
@@ -142,23 +134,24 @@ public class CanchaDAO {
         }
     }
 
-    public Vector<Cancha> listarCancha() {
+    public Vector<Cancha> listarCancha() throws SQLException {
         String consultaCanchas = "SELECT * FROM Cancha";
-        String consultaHorarios = "SELECT horario FROM CanchaHorario WHERE numero = ?";
+        String consultaHorarios = "SELECT horario FROM CanchaHorario WHERE idCancha = ?";
         Vector<Cancha> listaCanchas = new Vector<>();
-
-        try (Connection conn = DatabaseConnection.getInstancia().getConnection();
+        Connection conn = DatabaseConnection.getInstancia().getConnection();
+        try (
              PreparedStatement psCanchas = conn.prepareStatement(consultaCanchas);
              ResultSet rsCanchas = psCanchas.executeQuery()) {
 
             while (rsCanchas.next()) {
-                int numero = rsCanchas.getInt("numero");
+                int id = rsCanchas.getInt("id");
+                int numero = rsCanchas.getInt("numero"); // agregado
                 double precio = rsCanchas.getDouble("precio");
                 boolean esTechada = rsCanchas.getBoolean("esTechada");
                 boolean estaDisponible = rsCanchas.getBoolean("estaDisponible");
 
                 PreparedStatement psHorarios = conn.prepareStatement(consultaHorarios);
-                psHorarios.setInt(1, numero);
+                psHorarios.setInt(1, id);
                 ResultSet rsHorarios = psHorarios.executeQuery();
 
                 Vector<Time> horarios = new Vector<>();
@@ -168,12 +161,12 @@ public class CanchaDAO {
                 rsHorarios.close();
                 psHorarios.close();
 
-                CanchaHorario canchaHorario = new CanchaHorario(numero, horarios);
-                Cancha cancha = new Cancha(numero, esTechada, precio, estaDisponible, canchaHorario);
+                CanchaHorario canchaHorario = new CanchaHorario(id, horarios);
+                Cancha cancha = new Cancha(id, esTechada, precio, estaDisponible, numero, canchaHorario);
                 listaCanchas.add(cancha);
 
-                System.out.printf("-Numero: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
-                         numero, precio, esTechada ? "Sí" : "No", estaDisponible ? "Sí" : "No");
+                System.out.printf("-ID: %d | Nº: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
+                        id, numero, precio, esTechada ? "Sí" : "No", estaDisponible ? "Sí" : "No");
                 System.out.println("  Horarios:");
                 for (Time h : horarios) System.out.println("    " + h);
             }
@@ -190,7 +183,6 @@ public class CanchaDAO {
         String consultaId = "SELECT id FROM Cancha WHERE numero = ?";
         String consultaReservas = "SELECT COUNT(*) FROM Reserva WHERE idCancha = ? AND estaActiva = TRUE";
         String eliminarHorarios = "DELETE FROM CanchaHorario WHERE idCancha = ?";
-
         String eliminarCancha = "DELETE FROM Cancha WHERE id = ?";
 
         Connection conn = null;
@@ -217,7 +209,7 @@ public class CanchaDAO {
             psId.close();
 
             psReservas = conn.prepareStatement(consultaReservas);
-            psReservas.setInt(1, canchaDesactivar.getNumero());
+            psReservas.setInt(1, canchaDesactivar.getId());
             rs = psReservas.executeQuery();
             if (rs.next() && rs.getInt(1) > 0) {
                 System.out.println("No se puede eliminar la cancha. Tiene reservas activas.");
@@ -228,17 +220,18 @@ public class CanchaDAO {
             psReservas.close();
 
             psEliminarHorarios = conn.prepareStatement(eliminarHorarios);
-            psEliminarHorarios.setInt(1, canchaDesactivar.getNumero());
+            psEliminarHorarios.setInt(1, canchaDesactivar.getId());
             psEliminarHorarios.executeUpdate();
             psEliminarHorarios.close();
 
             psEliminarCancha = conn.prepareStatement(eliminarCancha);
-            psEliminarCancha.setInt(1, canchaDesactivar.getNumero());
+            psEliminarCancha.setInt(1, canchaDesactivar.getId());
             psEliminarCancha.executeUpdate();
             psEliminarCancha.close();
 
             conn.commit();
-            System.out.println("Cancha y sus horarios eliminados correctamente (Numero: " + canchaDesactivar.getNumero());
+            System.out.println("Cancha y sus horarios eliminados correctamente (ID: " + canchaDesactivar.getId() +
+                    " | Nº: " + canchaDesactivar.getNumero() + ")");
 
         } catch (SQLException e) {
             if (conn != null) {
@@ -264,14 +257,14 @@ public class CanchaDAO {
 
     public Vector<Cancha> busquedaAvanzada(Double minPrecio, Double maxPrecio,
                                            Boolean esTechada, Boolean disponible,
-                                           Date fecha, Time hora) {
+                                           Date fecha, Time hora) throws SQLException {
 
         Vector<Cancha> listaCanchas = new Vector<>();
         StringBuilder consulta = new StringBuilder(
-                "SELECT c.numero, c.numero, c.precio, c.esTechada, c.estaDisponible, " +
+                "SELECT c.id, c.numero, c.precio, c.esTechada, c.estaDisponible, " +
                         "GROUP_CONCAT(ch.horario SEPARATOR ',') AS horarios " +
                         "FROM Cancha c " +
-                        "JOIN CanchaHorario ch ON c.numero = ch.numero WHERE 1=1 "
+                        "JOIN CanchaHorario ch ON c.id = ch.idCancha WHERE 1=1 "
         );
 
         if (minPrecio != null) consulta.append("AND c.precio >= ? ");
@@ -279,9 +272,9 @@ public class CanchaDAO {
         if (esTechada != null) consulta.append("AND c.esTechada = ? ");
         if (disponible != null) consulta.append("AND c.estaDisponible = ? ");
         if (hora != null) consulta.append("AND ch.horario = ? ");
-        consulta.append("GROUP BY c.numero");
-
-        try (Connection conn = DatabaseConnection.getInstancia().getConnection();
+        consulta.append("GROUP BY c.id");
+        Connection conn = DatabaseConnection.getInstancia().getConnection();
+        try (
              PreparedStatement ps = conn.prepareStatement(consulta.toString())) {
 
             int index = 1;
@@ -293,7 +286,8 @@ public class CanchaDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    int numero = rs.getInt("numero");
+                    int id = rs.getInt("id");
+                    int numero = rs.getInt("numero"); // agregado
                     double precio = rs.getDouble("precio");
                     boolean techada = rs.getBoolean("esTechada");
                     boolean estaDisponible = rs.getBoolean("estaDisponible");
@@ -306,12 +300,12 @@ public class CanchaDAO {
                         }
                     }
 
-                    CanchaHorario canchaHorario = new CanchaHorario(numero, horarios);
-                    Cancha cancha = new Cancha(numero, techada, precio, estaDisponible, canchaHorario);
+                    CanchaHorario canchaHorario = new CanchaHorario(id, horarios);
+                    Cancha cancha = new Cancha(id, techada, precio, estaDisponible, numero, canchaHorario);
                     listaCanchas.add(cancha);
 
-                    System.out.printf("-Numero: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
-                            numero, precio, techada ? "Sí" : "No", estaDisponible ? "Sí" : "No");
+                    System.out.printf("-ID: %d | Nº: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
+                            id, numero, precio, techada ? "Sí" : "No", estaDisponible ? "Sí" : "No");
                     System.out.println("  Horarios:");
                     for (Time h : horarios) System.out.println("    " + h);
                 }
@@ -329,16 +323,14 @@ public class CanchaDAO {
     }
 
 
-
-    public void bloquearCanchaPorMantenimiento(Cancha canchaBloquear) {
+    public void bloquearCanchaPorMantenimiento(Cancha canchaBloquear) throws SQLException {
         String consultaId = "SELECT id FROM Cancha WHERE numero = ?";
         String consulta = "UPDATE Cancha SET estaDisponible = ? WHERE id = ?";
         PreparedStatement psId = null;
-
         PreparedStatement ps = null;
         ResultSet rs = null;
-
-        try (Connection conn = DatabaseConnection.getInstancia().getConnection()) {
+        Connection conn = DatabaseConnection.getInstancia().getConnection();
+        try {
 
             psId = conn.prepareStatement(consultaId);
             psId.setInt(1, canchaBloquear.getNumero());
@@ -353,13 +345,13 @@ public class CanchaDAO {
 
             ps = conn.prepareStatement(consulta);
             ps.setBoolean(1, false);
-            ps.setInt(2, canchaBloquear.getNumero());
+            ps.setInt(2, canchaBloquear.getId());
 
             int filasAfectadas = ps.executeUpdate();
             if (filasAfectadas > 0) {
-                System.out.println("Cancha bloqueada por mantenimiento (Numero: " + canchaBloquear.getNumero() + ")");
+                System.out.println("Cancha bloqueada por mantenimiento (ID: " + canchaBloquear.getId() + ")");
             } else {
-                System.out.println("No se encontró ninguna cancha con ese Numero.");
+                System.out.println("No se encontró ninguna cancha con ese ID.");
             }
 
         } catch (SQLException e) {
@@ -377,15 +369,14 @@ public class CanchaDAO {
 
 
 
-    public void desbloquearCancha(Cancha canchaDesbloquear) {
+    public void desbloquearCancha(Cancha canchaDesbloquear) throws SQLException {
         String consultaId = "SELECT id FROM Cancha WHERE numero = ?";
         String consulta = "UPDATE Cancha SET estaDisponible = ? WHERE id = ?";
         PreparedStatement psId = null;
-
         PreparedStatement ps = null;
         ResultSet rs = null;
-
-        try (Connection conn = DatabaseConnection.getInstancia().getConnection()) {
+        Connection conn = DatabaseConnection.getInstancia().getConnection();
+        try  {
 
             psId = conn.prepareStatement(consultaId);
             psId.setInt(1, canchaDesbloquear.getNumero());
@@ -400,13 +391,13 @@ public class CanchaDAO {
 
             ps = conn.prepareStatement(consulta);
             ps.setBoolean(1, true);
-            ps.setInt(2, canchaDesbloquear.getNumero());
+            ps.setInt(2, canchaDesbloquear.getId());
 
             int filasAfectadas = ps.executeUpdate();
             if (filasAfectadas > 0) {
-                System.out.println("Cancha desbloqueada (Numero: " + canchaDesbloquear.getNumero() + ")");
+                System.out.println("Cancha desbloqueada (ID: " + canchaDesbloquear.getId() + ")");
             } else {
-                System.out.println("No se encontró ninguna cancha con ese Numero.");
+                System.out.println("No se encontró ninguna cancha con ese ID.");
             }
 
         } catch (SQLException e) {

@@ -1,4 +1,5 @@
 package flujos;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -98,7 +99,7 @@ public class Menu {
         } while (opcion != 0);
     }
 
-    private void menuCancha() {
+    private void menuCancha() throws SQLException {
         int opcion;
         do {
             System.out.println("------ Menú Cancha ------");
@@ -621,7 +622,7 @@ public class Menu {
     }
 
 
-    private void actualizarCancha() {
+    private void actualizarCancha() throws SQLException {
         System.out.println("Canchas disponibles:");
         canchaDAO.listarCancha();
 
@@ -856,7 +857,7 @@ public class Menu {
         reservaDAO.pagarReserva(id);
     }
 
-    private void bloquearCanchaMantenimiento() {
+    private void bloquearCanchaMantenimiento() throws SQLException {
         System.out.println("===== BLOQUEAR CANCHA POR MANTENIMIENTO =====");
 
         Vector<Cancha> listaCanchas = canchaDAO.listarCancha();
@@ -911,7 +912,7 @@ public class Menu {
         }
     }
 
-    private void desbloquearCancha() {
+    private void desbloquearCancha() throws SQLException {
         System.out.println("===== DESBLOQUEAR CANCHA =====");
 
         Vector<Cancha> listaCanchas = canchaDAO.listarCancha();

@@ -24,7 +24,6 @@ public class ReservaDAO {
         long finMillis = inicioMillis + (90 * 60 * 1000); // 1h30m
         java.sql.Time horarioFinalCalculado = new java.sql.Time(finMillis);
 
-
         String validar = "SELECT COUNT(*) FROM Reserva r JOIN Cancha c ON r.idCancha = c.id " +
                 "WHERE c.numero = ? AND fecha = ? AND (horarioInicio < ? AND horarioFinal > ?)";
         String consulta = "INSERT INTO Reserva (cedulaUsuario, idCancha, fecha, horarioInicio, horarioFinal, horaCancelacion, metodoPago, estaPagada, estaActiva) " +
@@ -32,9 +31,7 @@ public class ReservaDAO {
 
         try (PreparedStatement psValidar = DatabaseConnection.getInstancia().getConnection().prepareStatement(validar)) {
 
-
             psValidar.setInt(1, nuevaReserva.getNumeroCancha());
-
             psValidar.setDate(2, new java.sql.Date(nuevaReserva.getFecha().getTime()));
             psValidar.setTime(3, horarioFinalCalculado);
             psValidar.setTime(4, nuevaReserva.getHorarioInicio());
@@ -53,9 +50,7 @@ public class ReservaDAO {
                 .prepareStatement(consulta, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, nuevaReserva.getCedulaUsuario());
-
             ps.setInt(2, nuevaReserva.getNumeroCancha());
-
             ps.setDate(3, new java.sql.Date(nuevaReserva.getFecha().getTime()));
             ps.setTime(4, nuevaReserva.getHorarioInicio());
             ps.setTime(5, horarioFinalCalculado);
@@ -86,14 +81,11 @@ public class ReservaDAO {
         long finMillis = inicioMillis + (90 * 60 * 1000);
         java.sql.Time horarioFinalCalculado = new java.sql.Time(finMillis);
 
-
         String validar = "SELECT COUNT(*) FROM Reserva r JOIN Cancha c ON r.idCancha = c.id " +
                 "WHERE c.numero = ? AND fecha = ? AND (horarioInicio < ? AND horarioFinal > ?) AND r.id <> ?";
 
-
         String consulta = "UPDATE Reserva SET cedulaUsuario = ?, idCancha = (SELECT id FROM Cancha WHERE numero = ?), fecha = ?, " +
                 "horarioInicio = ?, horarioFinal = ?, horaCancelacion = ?, metodoPago = ?, estaPagada = ?, estaActiva = ? WHERE id = ?";
-
 
         try (PreparedStatement psValidar = DatabaseConnection.getInstancia().getConnection().prepareStatement(validar)) {
 
@@ -102,7 +94,6 @@ public class ReservaDAO {
             psValidar.setTime(3, horarioFinalCalculado);
             psValidar.setTime(4, nuevaReserva.getHorarioInicio());
             psValidar.setInt(5, nuevaReserva.getId());
-
 
             try (ResultSet rs = psValidar.executeQuery()) {
                 if (rs.next() && rs.getInt(1) > 0) {
@@ -118,9 +109,7 @@ public class ReservaDAO {
         try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
 
             ps.setString(1, nuevaReserva.getCedulaUsuario());
-
             ps.setInt(2, nuevaReserva.getNumeroCancha());
-
             ps.setDate(3, new java.sql.Date(nuevaReserva.getFecha().getTime()));
             ps.setTime(4, nuevaReserva.getHorarioInicio());
             ps.setTime(5, horarioFinalCalculado);
@@ -128,7 +117,7 @@ public class ReservaDAO {
             ps.setString(7, nuevaReserva.getMetodoPago().getValue());
             ps.setBoolean(8, nuevaReserva.isEstaPagada());
             ps.setBoolean(9, nuevaReserva.isEstaActiva());
-            ps.setInt(10, nuevaReserva.getNumero());
+            ps.setInt(10, nuevaReserva.getId());
 
             ps.executeUpdate();
             System.out.println("Reserva modificada correctamente");
@@ -164,9 +153,7 @@ public class ReservaDAO {
             ps.setString(1, cedulaUsuario);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-
                     reservas.add(mapearReservaDesdeResultSet(rs));
-
                 }
             }
         } catch (SQLException e) {
@@ -175,7 +162,6 @@ public class ReservaDAO {
 
         return reservas;
     }
-
 
     // --- Listar reservas por número de cancha ---
     public Vector<Reserva> listarReservasPorCancha(int numeroCancha) {
@@ -188,7 +174,6 @@ public class ReservaDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     reservas.add(mapearReservaDesdeResultSet(rs));
-
                 }
             }
         } catch (SQLException e) {
@@ -207,7 +192,6 @@ public class ReservaDAO {
             ps.setDate(1, new java.sql.Date(fecha.getTime()));
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-
                     reservas.add(mapearReservaDesdeResultSet(rs));
                 }
             }
@@ -230,9 +214,7 @@ public class ReservaDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-
                     reservas.add(mapearReservaDesdeResultSet(rs));
-
                 }
             }
         } catch (SQLException e) {
@@ -332,6 +314,3 @@ public class ReservaDAO {
         return reserva;
     }
 }
-
-
-
