@@ -1,5 +1,6 @@
 package dao;
 import models.Administrador;
+import models.MetodoPago;
 import models.Reserva;
 
 import database.DatabaseConnection;
@@ -54,7 +55,7 @@ public class ReservaDAO {
             ps.setTime(4, nuevaReserva.getHorarioInicio());
             ps.setTime(5, horarioFinalCalculado);
             ps.setTime(6, nuevaReserva.getHoraCancelacion());
-            ps.setString(7, nuevaReserva.getMetodoPago());
+            ps.setString(7, nuevaReserva.getMetodoPago().getValue());
             ps.setBoolean(8, nuevaReserva.isEstaPagada());
             ps.setBoolean(9, nuevaReserva.isEstaActiva());
 
@@ -115,7 +116,7 @@ public class ReservaDAO {
             ps.setTime(4, nuevaReserva.getHorarioInicio());
             ps.setTime(5, horarioFinalCalculado); // Se guarda el fin fijo de 1h30m
             ps.setTime(6, nuevaReserva.getHoraCancelacion());
-            ps.setString(7, nuevaReserva.getMetodoPago());
+            ps.setString(7, nuevaReserva.getMetodoPago().getValue());
             ps.setBoolean(8, nuevaReserva.isEstaPagada());
             ps.setBoolean(9, nuevaReserva.isEstaActiva());
             ps.setInt(10, nuevaReserva.getId());
@@ -159,11 +160,15 @@ public class ReservaDAO {
                     Time horarioInicio = rs.getTime("horarioInicio");
                     Time horarioFinal = rs.getTime("horarioFinal");
                     Time horaCancelacion = rs.getTime("horaCancelacion");
-                    String metodoPago = rs.getString("metodoPago");
+                    String metodoPagoStr = rs.getString("metodoPago");
+                    MetodoPago metodoPagoEnum = MetodoPago.fromString(metodoPagoStr);
                     boolean estaPagada = rs.getBoolean("estaPagada");
                     boolean estaActiva = rs.getBoolean("estaActiva");
 
-                    Reserva reserva = new Reserva(cedula, idCancha1, fecha, horarioInicio, horarioFinal, horaCancelacion, metodoPago, estaPagada, estaActiva);
+                    Reserva reserva = new Reserva(
+                            cedula, idCancha1, fecha, horarioInicio, horarioFinal, horaCancelacion,
+                            metodoPagoEnum, estaPagada, estaActiva
+                    );
                     reserva.setId(rs.getInt("id"));
                     reservas.add(reserva);
                 }
@@ -190,11 +195,15 @@ public class ReservaDAO {
                     Time horarioInicio = rs.getTime("horarioInicio");
                     Time horarioFinal = rs.getTime("horarioFinal");
                     Time horaCancelacion = rs.getTime("horaCancelacion");
-                    String metodoPago = rs.getString("metodoPago");
+                    String metodoPagoStr = rs.getString("metodoPago");
+                    MetodoPago metodoPagoEnum = MetodoPago.fromString(metodoPagoStr);
                     boolean estaPagada = rs.getBoolean("estaPagada");
                     boolean estaActiva = rs.getBoolean("estaActiva");
 
-                    Reserva reserva = new Reserva(cedula, idCancha1, fecha, horarioInicio, horarioFinal, horaCancelacion, metodoPago, estaPagada, estaActiva);
+                    Reserva reserva = new Reserva(
+                            cedula, idCancha1, fecha, horarioInicio, horarioFinal, horaCancelacion,
+                            metodoPagoEnum, estaPagada, estaActiva
+                    );
                     reserva.setId(rs.getInt("id"));
                     reservas.add(reserva);
                 }
@@ -220,11 +229,15 @@ public class ReservaDAO {
                     Time horarioInicio = rs.getTime("horarioInicio");
                     Time horarioFinal = rs.getTime("horarioFinal");
                     Time horaCancelacion = rs.getTime("horaCancelacion");
-                    String metodoPago = rs.getString("metodoPago");
+                    String metodoPagoStr = rs.getString("metodoPago");
+                    MetodoPago metodoPagoEnum = MetodoPago.fromString(metodoPagoStr);
                     boolean estaPagada = rs.getBoolean("estaPagada");
                     boolean estaActiva = rs.getBoolean("estaActiva");
 
-                    Reserva reserva = new Reserva(cedula, idCancha1, fecha, horarioInicio, horarioFinal, horaCancelacion, metodoPago, estaPagada, estaActiva);
+                    Reserva reserva = new Reserva(
+                            cedula, idCancha1, fecha, horarioInicio, horarioFinal, horaCancelacion,
+                            metodoPagoEnum, estaPagada, estaActiva
+                    );
                     reserva.setId(rs.getInt("id"));
                     reservas.add(reserva);
                 }
@@ -253,11 +266,15 @@ public class ReservaDAO {
                     Time horarioInicio = rs.getTime("horarioInicio");
                     Time horarioFinal = rs.getTime("horarioFinal");
                     Time horaCancelacion = rs.getTime("horaCancelacion");
-                    String metodoPago = rs.getString("metodoPago");
+                    String metodoPagoStr = rs.getString("metodoPago");
+                    MetodoPago metodoPagoEnum = MetodoPago.fromString(metodoPagoStr);
                     boolean estaPagada = rs.getBoolean("estaPagada");
                     boolean estaActiva = rs.getBoolean("estaActiva");
 
-                    Reserva reserva = new Reserva(cedula, idCancha1, fecha, horarioInicio, horarioFinal, horaCancelacion, metodoPago, estaPagada, estaActiva);
+                    Reserva reserva = new Reserva(
+                            cedula, idCancha1, fecha, horarioInicio, horarioFinal, horaCancelacion,
+                            metodoPagoEnum, estaPagada, estaActiva
+                    );
                     reserva.setId(rs.getInt("id"));
                     reservas.add(reserva);
                 }
