@@ -7,16 +7,25 @@ public class Cancha {
     private int id;
     private boolean esTechada;
     private double precio;
-    private boolean estaDispoonible;
+    private boolean estaDisponible;
+    private int numero;              // <-- nuevo atributo
     private CanchaHorario horario;
 
-
-    public Cancha(int id, boolean esT, double p, boolean esD, CanchaHorario h) {
+    public Cancha(int id, boolean esT, double p, boolean esD, int numero, CanchaHorario h) {
         this.id = id;
         this.esTechada = esT;
         this.precio = p;
-        this.estaDispoonible =  esD;
+        this.estaDisponible = esD;
+        this.numero = numero;        // <-- inicializar número
         this.horario = h;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 
     public CanchaHorario getHorario() {
@@ -51,11 +60,11 @@ public class Cancha {
         this.precio = precio;
     }
 
-    public boolean isEstaDispoonible() {
-        return estaDispoonible;
+    public boolean isEstaDisponible() {
+        return estaDisponible;
     }
 
-    public void setEstaDispoonible(boolean estaDispoonible) {
-        this.estaDispoonible = estaDispoonible;
+    public void setEstaDisponible(boolean estaDisponible) {
+        this.estaDisponible = estaDisponible;
     }
 }

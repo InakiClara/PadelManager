@@ -137,14 +137,18 @@ public class JugadorDAO {
         return jugadores;
     }
 
-    public void analizarBaneos() throws SQLException {
+    public void analizarBaneos() {
         String consultaSelect = "SELECT cedula, incumplePago FROM Jugador";
         String consultaUpdate = "UPDATE Jugador SET estaBaneado = ? WHERE cedula = ?";
         int totalBaneados = 0;
         List<String> cedulasBaneados = new ArrayList<>();
-        Connection conn = DatabaseConnection.getInstancia().getConnection();
+        Connection conn = null;
+        try {
+            conn = DatabaseConnection.getInstancia().getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         try (
-
                 PreparedStatement psSelect = conn.prepareStatement(consultaSelect);
                 ResultSet rs = psSelect.executeQuery()
         ) {
@@ -173,6 +177,7 @@ public class JugadorDAO {
             throw new RuntimeException("Error al analizar baneos", e);
         }
     }
+
     public Vector<Jugador> listarJugadoresBaneados() {
         Vector<Jugador> jugadores = new Vector<>();
         String consulta = "SELECT u.cedula, u.nombre, u.apellido, u.correo, u.telefono, u.contraseniaCuenta, j.fechaNacimiento, j.categoria, j.genero, j.incumplePago, j.estaBaneado FROM Usuario u JOIN Jugador j ON u.cedula = j.cedula WHERE j.estaBaneado = TRUE";
