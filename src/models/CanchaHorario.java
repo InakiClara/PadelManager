@@ -5,10 +5,13 @@ import java.util.Vector;
 
 public class CanchaHorario {
     private Vector<Time> horarios;
-    private int numeroCancha;
-    public CanchaHorario(int numeroCancha, Vector<Time> h){
-        this.horarios = h;
-        this.numeroCancha = numeroCancha;
+
+    private int idCancha;  // referencia al id autoincremental de Cancha
+
+    public CanchaHorario(int idCancha, Vector<Time> horarios){
+        this.idCancha = idCancha;
+        this.horarios = horarios;
+
     }
 
     public Vector<Time> getHorarios() {
@@ -26,6 +29,4 @@ public class CanchaHorario {
     public void setNumeroCancha(int numeroCancha) {
         this.numeroCancha = numeroCancha;
     }
-
-
 }

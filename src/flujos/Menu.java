@@ -368,14 +368,14 @@ public class Menu {
 
     private void crearReserva() {
         try {
-            listarTodosLosUsuarios(); // Mostrar usuarios para no memorizar cédulas
+            listarTodosLosUsuarios(); // Mostrar usuarios
 
             System.out.print("Cédula del jugador: ");
             String cedulaUsuario = scanner.nextLine();
 
-            System.out.print("ID de la cancha: ");
-            int idCancha = scanner.nextInt();
-            scanner.nextLine();
+            System.out.print("Número de la cancha: ");
+            int numeroCancha = scanner.nextInt();
+            scanner.nextLine(); // Limpiar buffer
 
             System.out.print("Fecha (dd/MM/yyyy): ");
             String fechaStr = scanner.nextLine();
@@ -385,12 +385,9 @@ public class Menu {
             System.out.print("Horario inicio (HH:mm): ");
             String horaInicioStr = scanner.nextLine();
             Time horarioInicio = Time.valueOf(horaInicioStr + ":00");
+            Time horarioFin = new Time(horarioInicio.getTime() + 90 * 60 * 1000);
 
-            long millisInicio = horarioInicio.getTime();
-            long millisFin = millisInicio + (90 * 60 * 1000); // 90 minutos
-            Time horarioFin = new Time(millisFin);
-
-            // Solicitar método de pago y convertir a enum
+            // Solicitar método de pago
             MetodoPago metodoPago = null;
             while (metodoPago == null) {
                 System.out.print("Método de pago (efectivo, tarjeta, transferencia, mercado_pago): ");
@@ -402,13 +399,15 @@ public class Menu {
                 }
             }
 
-            Reserva reserva = new Reserva(cedulaUsuario, idCancha, fecha, horarioInicio, horarioFin, null, metodoPago, false, true);
+            // Usamos el número de cancha, el DAO se encarga de obtener el id
+            Reserva reserva = new Reserva(cedulaUsuario, numeroCancha, fecha, horarioInicio, horarioFin, null, metodoPago, false, true);
             reservaDAO.crearReserva(reserva);
-
             System.out.println("Reserva creada correctamente: " + reserva);
 
         } catch (ParseException e) {
             System.out.println("Formato de fecha incorrecto. Use dd/MM/yyyy");
+        } catch (Exception e) {
+            System.out.println("Error al crear la reserva: " + e.getMessage());
         }
     }
 
@@ -430,19 +429,15 @@ public class Menu {
             System.out.print("Nuevo horario inicio (HH:mm): ");
             String horaInicioStr = scanner.nextLine();
             Time horarioInicio = Time.valueOf(horaInicioStr + ":00");
-
-            long millisInicio = horarioInicio.getTime();
-            long millisFin = millisInicio + (90 * 60 * 1000);
-            Time horarioFin = new Time(millisFin);
+            Time horarioFin = new Time(horarioInicio.getTime() + 90 * 60 * 1000);
 
             System.out.println("Canchas disponibles:");
-            canchaDAO.listarCancha();  // Mostrar todas las canchas
+            canchaDAO.listarCancha();
 
-            System.out.print("Ingrese nuevo ID de la cancha: ");
-            int idCancha = scanner.nextInt();
+            System.out.print("Ingrese nuevo número de la cancha: ");
+            int numeroCancha = scanner.nextInt();
             scanner.nextLine();
 
-            // Solicitar método de pago y convertir a enum
             MetodoPago metodoPago = null;
             while (metodoPago == null) {
                 System.out.print("Nuevo método de pago (efectivo, tarjeta, transferencia, mercado_pago): ");
@@ -454,63 +449,58 @@ public class Menu {
                 }
             }
 
-            Reserva reserva = new Reserva(cedulaUsuario, idCancha, fecha, horarioInicio, horarioFin, null, metodoPago, false, true);
+            // El DAO se encargará de convertir numeroCancha a id
+            Reserva reserva = new Reserva(cedulaUsuario, numeroCancha, fecha, horarioInicio, horarioFin, null, metodoPago, false, true);
             reserva.setId(id);
-
             reservaDAO.actualizarReserva(reserva);
+
             System.out.println("Reserva modificada correctamente: " + reserva);
 
+        } catch (ParseException e) {
+            System.out.println("Formato de fecha incorrecto. Use dd/MM/yyyy");
         } catch (Exception e) {
             System.out.println("Error al modificar la reserva: " + e.getMessage());
         }
     }
 
-
-
     private void cancelarReserva() {
-        System.out.print("ID de la reserva: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-
-        reservaDAO.cancelarReserva(id);
+        try {
+            System.out.print("ID de la reserva: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+            reservaDAO.cancelarReserva(id);
+            System.out.println("Reserva cancelada correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al cancelar la reserva: " + e.getMessage());
+        }
     }
 
-
-
     private void listarReservasPorUsuario() {
-        // Mostrar todos los usuarios antes de pedir cédula
-        listarTodosLosUsuarios();  // Llama a la función ya existente
-
+        listarTodosLosUsuarios();
         System.out.print("Cédula del usuario: ");
         String cedulaUsuario = scanner.nextLine();
 
         Vector<Reserva> reservas = reservaDAO.listarReservasPorUsuario(cedulaUsuario);
-
         if (reservas.isEmpty()) {
             System.out.println("No se encontraron reservas para este usuario.");
         } else {
-            for (Reserva r : reservas) {
-                System.out.println(r);
-            }
+            reservas.forEach(System.out::println);
         }
     }
 
-
     private void listarReservaPorCancha() {
-        System.out.print("ID de la cancha: ");
-        int idCancha = scanner.nextInt();
+        System.out.print("Número de la cancha: ");
+        int numero = scanner.nextInt();
         scanner.nextLine();
 
-        Vector<Reserva> reservas = reservaDAO.listarReservasPorCancha(idCancha);
-
+        Vector<Reserva> reservas = reservaDAO.listarReservasPorCancha(numero); // DAO ya usa numero
         if (reservas.isEmpty()) {
             System.out.println("No se encontraron reservas para esta cancha.");
         } else {
-            for (Reserva r : reservas) {
-                System.out.println(r);
-            }
+            reservas.forEach(System.out::println);
         }
     }
+
 
     private void iniciarSesion() {
         System.out.print("Ingrese cédula: ");
@@ -592,7 +582,9 @@ public class Menu {
     }
 
     private void crearCancha() {
-        System.out.println("Ingrese Numero:");
+
+        System.out.print("Número de la cancha: ");
+
         int numero = scanner.nextInt();
         scanner.nextLine();
 
@@ -620,33 +612,21 @@ public class Menu {
             horarios.add(horario);
         }
 
-        CanchaHorario canchaHorario = new CanchaHorario(numero, horarios);
-        Cancha nuevaCancha = new Cancha(numero, esTechada, precio, estaDisponible, canchaHorario);
+
+        CanchaHorario canchaHorario = new CanchaHorario(0, horarios); // id se genera internamente
+        Cancha nuevaCancha = new Cancha(0, esTechada, precio, estaDisponible, numero, canchaHorario);
+
 
         canchaDAO.altaCancha(nuevaCancha);
     }
 
-    private void desactivarCancha() {
-        System.out.print("Ingrese el Numero de la cancha a desactivar: ");
-        int numero = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("¿Está seguro de desactivar esta cancha? (S/N): ");
-        String confirmacion = scanner.nextLine();
-
-        if (confirmacion.equalsIgnoreCase("S")) {
-            Cancha canchaDesactivar = new Cancha(numero, false, 0.0, false, null);
-            canchaDAO.desactivarCancha(canchaDesactivar);
-        } else {
-            System.out.println("Operación cancelada.");
-        }
-    }
 
     private void actualizarCancha() {
         System.out.println("Canchas disponibles:");
         canchaDAO.listarCancha();
 
-        System.out.print("Ingrese el Numero de la cancha a actualizar: ");
+        System.out.print("Número de la cancha a actualizar: ");
+
         int numero = scanner.nextInt();
         scanner.nextLine();
 
@@ -674,11 +654,29 @@ public class Menu {
             horarios.add(horario);
         }
 
-        CanchaHorario canchaHorario = new CanchaHorario(numero, horarios);
-        Cancha canchaActualizar = new Cancha(numero, esTechada, precio, estaDisponible, canchaHorario);
+        CanchaHorario canchaHorario = new CanchaHorario(0, horarios); // id se obtiene en DAO
+        Cancha canchaActualizar = new Cancha(0, esTechada, precio, estaDisponible, numero, canchaHorario);
+
 
         canchaDAO.actualizarCancha(canchaActualizar);
     }
+
+    private void desactivarCancha() {
+        System.out.print("Número de la cancha a desactivar: ");
+        int numero = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("¿Está seguro de desactivar esta cancha? (S/N): ");
+        String confirmacion = scanner.nextLine();
+
+        if (confirmacion.equalsIgnoreCase("S")) {
+            Cancha canchaDesactivar = new Cancha(0, false, 0.0, false, numero, null);
+            canchaDAO.desactivarCancha(canchaDesactivar);
+        } else {
+            System.out.println("Operación cancelada.");
+        }
+    }
+
 
 
     private void listarReservasPorFecha() {
@@ -859,7 +857,6 @@ public class Menu {
     }
 
     private void bloquearCanchaMantenimiento() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("===== BLOQUEAR CANCHA POR MANTENIMIENTO =====");
 
         Vector<Cancha> listaCanchas = canchaDAO.listarCancha();
@@ -871,13 +868,18 @@ public class Menu {
         System.out.println("Lista de canchas:");
         for (Cancha c : listaCanchas) {
             System.out.printf("Número: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
-                    c.getNumero(), c.getNumero(), c.getPrecio(),
+
+                    c.getNumero(), c.getPrecio(),
+
                     c.isEsTechada() ? "Sí" : "No",
                     c.isEstaDisponible() ? "Sí" : "No");
         }
 
-        System.out.print("Ingrese el Numero de la cancha que desea bloquear: ");
+
+        System.out.print("Ingrese el número de la cancha que desea bloquear: ");
         int numeroSeleccionado = scanner.nextInt();
+        scanner.nextLine();
+
 
         Cancha canchaSeleccionada = null;
         for (Cancha c : listaCanchas) {
@@ -888,7 +890,9 @@ public class Menu {
         }
 
         if (canchaSeleccionada == null) {
-            System.out.println("No se encontró una cancha con ese numero.");
+
+            System.out.println("No se encontró una cancha con ese número.");
+
             return;
         }
 
@@ -898,7 +902,7 @@ public class Menu {
         }
 
         System.out.print("¿Está seguro que desea bloquear esta cancha por mantenimiento? (s/n): ");
-        String confirmacion = scanner.next();
+        String confirmacion = scanner.nextLine();
 
         if (confirmacion.equalsIgnoreCase("s")) {
             canchaDAO.bloquearCanchaPorMantenimiento(canchaSeleccionada);
@@ -908,7 +912,6 @@ public class Menu {
     }
 
     private void desbloquearCancha() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("===== DESBLOQUEAR CANCHA =====");
 
         Vector<Cancha> listaCanchas = canchaDAO.listarCancha();
@@ -920,13 +923,18 @@ public class Menu {
         System.out.println("Lista de canchas:");
         for (Cancha c : listaCanchas) {
             System.out.printf("Número: %d | Precio: %.2f | Techada: %s | Disponible: %s%n",
-                    c.getNumero(), c.getNumero(), c.getPrecio(),
+
+                    c.getNumero(), c.getPrecio(),
+
                     c.isEsTechada() ? "Sí" : "No",
                     c.isEstaDisponible() ? "Sí" : "No");
         }
 
-        System.out.print("Ingrese el Numero de la cancha que desea desbloquear: ");
+
+        System.out.print("Ingrese el número de la cancha que desea desbloquear: ");
         int numeroSeleccionado = scanner.nextInt();
+        scanner.nextLine();
+
 
         Cancha canchaSeleccionada = null;
         for (Cancha c : listaCanchas) {
@@ -937,7 +945,9 @@ public class Menu {
         }
 
         if (canchaSeleccionada == null) {
-            System.out.println("No se encontró una cancha con ese Numero.");
+
+            System.out.println("No se encontró una cancha con ese número.");
+
             return;
         }
 
@@ -947,7 +957,7 @@ public class Menu {
         }
 
         System.out.print("¿Está seguro que desea desbloquear esta cancha? (s/n): ");
-        String confirmacion = scanner.next();
+        String confirmacion = scanner.nextLine();
 
         if (confirmacion.equalsIgnoreCase("s")) {
             canchaDAO.desbloquearCancha(canchaSeleccionada);
@@ -955,6 +965,7 @@ public class Menu {
             System.out.println("Operación cancelada.");
         }
     }
+
 
     private void busquedaAvanzadaMenu() {
         try {
