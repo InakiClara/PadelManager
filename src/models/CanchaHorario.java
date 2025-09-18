@@ -5,10 +5,10 @@ import java.util.Vector;
 
 public class CanchaHorario {
     private Vector<Time> horarios;
-    private int idCancha;
-    public CanchaHorario(int id, Vector<Time> h){
+    private int numeroCancha;
+    public CanchaHorario(int numeroCancha, Vector<Time> h){
         this.horarios = h;
-        this.idCancha = id;
+        this.numeroCancha = numeroCancha;
     }
 
     public Vector<Time> getHorarios() {
@@ -19,12 +19,12 @@ public class CanchaHorario {
         this.horarios = horarios;
     }
 
-    public int getIdCancha() {
-        return idCancha;
+    public int getNumeroCancha() {
+        return numeroCancha;
     }
 
-    public void setIdCancha(int idCancha) {
-        this.idCancha = idCancha;
+    public void setNumeroCancha(int numeroCancha) {
+        this.numeroCancha = numeroCancha;
     }
 
 
