@@ -14,13 +14,13 @@ public class Reserva {
     private Time horarioInicio;
     private Time horarioFinal;
     private Time horaCancelacion;
-    private String metodoPago;
+    private MetodoPago metodoPago;
     private boolean estaPagada;
     private boolean estaActiva;
     Vector <models.Usuario> usuarios;
     Vector <models.Cancha> canchas;
 
-    public Reserva(String cedulaUsuario, int idCancha, Date fecha, Time horarioInicio, Time horarioFinal, Time horaCancelacion, String metodoPago, boolean estaPagada, boolean estaActiva){
+    public Reserva(String cedulaUsuario, int idCancha, Date fecha, Time horarioInicio, Time horarioFinal, Time horaCancelacion, MetodoPago metodoPago, boolean estaPagada, boolean estaActiva){
         this.cedulaUsuario = cedulaUsuario;
         this.idCancha = idCancha;
         this.fecha = fecha;
@@ -85,11 +85,11 @@ public class Reserva {
         this.horaCancelacion = horaCancelacion;
     }
 
-    public String getMetodoPago() {
+    public MetodoPago getMetodoPago() {
         return metodoPago;
     }
 
-    public void setMetodoPago(String metodoPago) {
+    public void setMetodoPago(MetodoPago metodoPago) {
         this.metodoPago = metodoPago;
     }
 

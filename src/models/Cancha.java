@@ -61,10 +61,10 @@ public class Cancha {
     }
 
     public boolean isEstaDisponible() {
-        return estaDispoonible;
+        return estaDisponible;
     }
 
-    public void setEstaDisponible(boolean estaDispoonible) {
-        this.estaDispoonible = estaDispoonible;
+    public void setEstaDisponible(boolean estaDisponible) {
+        this.estaDisponible = estaDisponible;
     }
 }

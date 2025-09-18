@@ -368,7 +368,7 @@ public class Menu {
 
     private void crearReserva() {
         try {
-            listarTodosLosUsuarios(); // Mostrar usuarios para no tener que memorizar cédulas
+            listarTodosLosUsuarios(); // Mostrar usuarios para no memorizar cédulas
 
             System.out.print("Cédula del jugador: ");
             String cedulaUsuario = scanner.nextLine();
@@ -390,28 +390,26 @@ public class Menu {
             long millisFin = millisInicio + (90 * 60 * 1000); // 90 minutos
             Time horarioFin = new Time(millisFin);
 
-            System.out.print("Método de pago: ");
-            String metodoPago = scanner.nextLine();
+            // Solicitar método de pago y convertir a enum
+            MetodoPago metodoPago = null;
+            while (metodoPago == null) {
+                System.out.print("Método de pago (efectivo, tarjeta, transferencia, mercado_pago): ");
+                String metodoPagoStr = scanner.nextLine();
+                try {
+                    metodoPago = MetodoPago.fromString(metodoPagoStr);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Método de pago inválido. Intente nuevamente.");
+                }
+            }
 
             Reserva reserva = new Reserva(cedulaUsuario, idCancha, fecha, horarioInicio, horarioFin, null, metodoPago, false, true);
             reservaDAO.crearReserva(reserva);
 
-            System.out.println("Reserva creada: " + reserva);
+            System.out.println("Reserva creada correctamente: " + reserva);
 
         } catch (ParseException e) {
             System.out.println("Formato de fecha incorrecto. Use dd/MM/yyyy");
         }
-    }
-
-
-
-
-    private void cancelarReserva() {
-        System.out.print("ID de la reserva: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-
-        reservaDAO.cancelarReserva(id);
     }
 
     private void modificarReserva() {
@@ -420,7 +418,7 @@ public class Menu {
             int id = scanner.nextInt();
             scanner.nextLine();
 
-            listarTodosLosUsuarios(); // Mostrar todos los usuarios antes de pedir cédula
+            listarTodosLosUsuarios(); // Mostrar todos los usuarios
 
             System.out.print("Cédula del jugador: ");
             String cedulaUsuario = scanner.nextLine();
@@ -444,8 +442,17 @@ public class Menu {
             int idCancha = scanner.nextInt();
             scanner.nextLine();
 
-            System.out.print("Ingrese nuevo metodo de pago: ");
-            String metodoPago = scanner.nextLine();
+            // Solicitar método de pago y convertir a enum
+            MetodoPago metodoPago = null;
+            while (metodoPago == null) {
+                System.out.print("Nuevo método de pago (efectivo, tarjeta, transferencia, mercado_pago): ");
+                String metodoPagoStr = scanner.nextLine();
+                try {
+                    metodoPago = MetodoPago.fromString(metodoPagoStr);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Método de pago inválido. Intente nuevamente.");
+                }
+            }
 
             Reserva reserva = new Reserva(cedulaUsuario, idCancha, fecha, horarioInicio, horarioFin, null, metodoPago, false, true);
             reserva.setId(id);
@@ -459,6 +466,14 @@ public class Menu {
     }
 
 
+
+    private void cancelarReserva() {
+        System.out.print("ID de la reserva: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        reservaDAO.cancelarReserva(id);
+    }
 
 
 
