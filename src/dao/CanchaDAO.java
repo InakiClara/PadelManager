@@ -414,12 +414,12 @@ public class CanchaDAO {
     }
 
     public boolean canchaDisponible(int numeroCancha) {
-        String consulta = "SELECT estaBloqueada FROM Cancha WHERE numero = ?";
+        String consulta = "SELECT estaDisponible FROM Cancha WHERE numero = ?";
         try {
             PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
             ps.setInt(1, numeroCancha);
             try (ResultSet rs = ps.executeQuery()) {
-                return rs.next() && !rs.getBoolean("estaBloqueada");
+                return rs.next() && rs.getBoolean("estaDisponible");
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error al verificar disponibilidad de cancha", e);
