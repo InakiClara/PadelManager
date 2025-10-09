@@ -83,7 +83,7 @@ public class UsuarioDAO {
     public Vector<Usuario> listarUsuarios(String criterio) {
         Vector<Usuario> usuarios = new Vector<>();
         String consulta = "SELECT cedula, nombre, apellido, telefono, correo, fechaIngreso, esAdministrador FROM Usuario WHERE cedula LIKE ? OR nombre LIKE ? OR apellido LIKE ?";
-";
+
 
         try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
 
