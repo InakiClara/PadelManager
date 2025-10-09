@@ -82,7 +82,8 @@ public class UsuarioDAO {
 
     public Vector<Usuario> listarUsuarios(String criterio) {
         Vector<Usuario> usuarios = new Vector<>();
-        String consulta = "SELECT cedula, nombre, apellido, telefono, correo, fechaIngreso FROM Usuario WHERE cedula LIKE ? OR nombre LIKE ? OR apellido LIKE ?";
+        String consulta = "SELECT cedula, nombre, apellido, telefono, correo, fechaIngreso, esAdministrador FROM Usuario WHERE cedula LIKE ? OR nombre LIKE ? OR apellido LIKE ?";
+";
 
         try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
 
@@ -100,6 +101,8 @@ public class UsuarioDAO {
                     usuario.setTelefono(rs.getString("telefono"));
                     usuario.setCorreo(rs.getString("correo"));
                     usuario.setFechaIngreso(rs.getDate("fechaIngreso"));
+                    usuario.setEsAdministrador(rs.getBoolean("esAdministrador"));
+
 
 
                     usuarios.add(usuario);
