@@ -10,6 +10,8 @@ public class Usuario {
     private String telefono;
     private String contraseniaCuenta;
     private Date fechaIngreso;
+    private boolean esAdministrador;
+
 
     public Usuario() {
     }
@@ -77,6 +79,15 @@ public class Usuario {
     public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
+
+    public boolean esAdministrador() {
+        return esAdministrador;
+    }
+    
+    public void setEsAdministrador(boolean esAdministrador) {
+        this.esAdministrador = esAdministrador;
+    }
+
 
     @Override
     public String toString() {
