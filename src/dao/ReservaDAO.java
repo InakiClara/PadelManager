@@ -331,24 +331,59 @@ public class ReservaDAO {
         reserva.setId(rs.getInt("id"));
         return reserva;
     }
+
+    // Total de reservas activas
+public int totalReservasActivas() {
+    String consulta = "SELECT COUNT(*) AS total FROM Reserva WHERE estaActiva = TRUE";
+    try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
+         ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) return rs.getInt("total");
+    } catch (SQLException e) { throw new RuntimeException(e); }
+    return 0;
 }
 
-// Contar reservas activas por cédula de usuario
-public int contarReservasActivasPorCedula(String cedulaUsuario) {
+// Total de reservas por usuario
+public int totalReservasPorUsuario(String cedulaUsuario) {
     String consulta = "SELECT COUNT(*) AS total FROM Reserva WHERE cedulaUsuario = ? AND estaActiva = TRUE";
-    int total = 0;
-
     try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
         ps.setString(1, cedulaUsuario);
         try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                total = rs.getInt("total");
-            }
+            if (rs.next()) return rs.getInt("total");
         }
-    } catch (SQLException e) {
-        throw new RuntimeException("Error al contar reservas activas para el usuario con cédula " + cedulaUsuario, e);
-    }
-
-    return total;
+    } catch (SQLException e) { throw new RuntimeException(e); }
+    return 0;
 }
+
+// Total de reservas por cancha
+public int totalReservasPorCancha(int numeroCancha) {
+    String consulta = "SELECT COUNT(*) AS total FROM Reserva r JOIN Cancha c ON r.idCancha = c.id WHERE c.numero = ? AND r.estaActiva = TRUE";
+    try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
+        ps.setInt(1, numeroCancha);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt("total");
+        }
+    } catch (SQLException e) { throw new RuntimeException(e); }
+    return 0;
+}
+
+// Reservas pagadas / no pagadas
+public int totalReservasPagadas() {
+    String consulta = "SELECT COUNT(*) AS total FROM Reserva WHERE estaPagada = TRUE";
+    try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
+         ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) return rs.getInt("total");
+    } catch (SQLException e) { throw new RuntimeException(e); }
+    return 0;
+}
+public int totalReservasNoPagadas() {
+    String consulta = "SELECT COUNT(*) AS total FROM Reserva WHERE estaPagada = FALSE";
+    try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
+         ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) return rs.getInt("total");
+    } catch (SQLException e) { throw new RuntimeException(e); }
+    return 0;
+}
+
+}
+
 
