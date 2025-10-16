@@ -449,7 +449,7 @@ public int totalCanchas() {
     return 0;
 }
 
-// Total de canchas techadas
+// Total de canchas techadasasd
 public int totalCanchasTechadas() {
     String consulta = "SELECT COUNT(*) AS total FROM Cancha WHERE esTechada = TRUE";
     try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
