@@ -332,3 +332,23 @@ public class ReservaDAO {
         return reserva;
     }
 }
+
+// Contar reservas activas por cédula de usuario
+public int contarReservasActivasPorCedula(String cedulaUsuario) {
+    String consulta = "SELECT COUNT(*) AS total FROM Reserva WHERE cedulaUsuario = ? AND estaActiva = TRUE";
+    int total = 0;
+
+    try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta)) {
+        ps.setString(1, cedulaUsuario);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                total = rs.getInt("total");
+            }
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException("Error al contar reservas activas para el usuario con cédula " + cedulaUsuario, e);
+    }
+
+    return total;
+}
+
