@@ -198,6 +198,17 @@ public class UsuarioDAO {
         }
     }
 
+    // Total de usuarios registrados
+public int totalUsuarios() {
+    String consulta = "SELECT COUNT(*) AS total FROM Usuario";
+    try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
+         ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) return rs.getInt("total");
+    } catch (SQLException e) { throw new RuntimeException(e); }
+    return 0;
+}
+
+
 
 
 
