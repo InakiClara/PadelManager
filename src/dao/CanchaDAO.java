@@ -439,5 +439,36 @@ public class CanchaDAO {
         }
     }
 
+    // Total de canchas
+public int totalCanchas() {
+    String consulta = "SELECT COUNT(*) AS total FROM Cancha";
+    try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
+         ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) return rs.getInt("total");
+    } catch (SQLException e) { throw new RuntimeException(e); }
+    return 0;
+}
+
+// Total de canchas techadas
+public int totalCanchasTechadas() {
+    String consulta = "SELECT COUNT(*) AS total FROM Cancha WHERE esTechada = TRUE";
+    try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
+         ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) return rs.getInt("total");
+    } catch (SQLException e) { throw new RuntimeException(e); }
+    return 0;
+}
+
+// Total de canchas disponibles
+public int totalCanchasDisponibles() {
+    String consulta = "SELECT COUNT(*) AS total FROM Cancha WHERE estaDisponible = TRUE";
+    try (PreparedStatement ps = DatabaseConnection.getInstancia().getConnection().prepareStatement(consulta);
+         ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) return rs.getInt("total");
+    } catch (SQLException e) { throw new RuntimeException(e); }
+    return 0;
+}
+
+
 
 }
